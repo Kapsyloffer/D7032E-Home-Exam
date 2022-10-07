@@ -6,6 +6,7 @@ public class Player
 	private String name; //Hi, I'm Paul.
 	private int turnsLeft; //1 då man får turn, 2 om man blir attacked
 	private int PlayerID; //Checka om playerID+1 finns, annars gå tillbaka till 0.
+	private Player NextPlayer; //The target we attack
 	private ArrayList<Card> hand = new ArrayList<Card>();
 	private boolean alive = true;
 	
@@ -30,6 +31,7 @@ public class Player
 		return alive;
 	}
 	
+	//Draw
 	public void AddToHand(Card c)
 	{
 		if(c.getType() != 0)
@@ -50,13 +52,28 @@ public class Player
 			}
 			if(!defused)
 			{
-				Explode();
+				
 			}
 			//BOOM
 		}
 	}
 	
-	private void Explode()
+	public void PassTurn()
+	{
+		
+	}
+	
+	public void SetNextPlayer(Player p)
+	{
+		NextPlayer = p;
+	}
+	
+	public Player GetNextPlayer()
+	{
+		return NextPlayer;
+	}
+	
+	public void Explode()
 	{
 		alive = false;
 	}

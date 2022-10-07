@@ -58,33 +58,38 @@ public class Card
 	}
 	
 	//Om ett kort spelas så kör vi abilitin
-	public void cardAbility()
+	public void cardAbility(Player playedBy)
 	{
 		switch(type)
 		{
-		//case(0): Hanteras i player
-			//explode
-			//return;
-		//case(1):
+		case(0): 
+			playedBy.Explode();
+			return;
+		case(1):
 			//Defuse
-			//return;
+			return;
 		case(2):
-			//Attack 2x
+			playedBy.PassTurn();
+			playedBy.GetNextPlayer().addTurns(2);
 			return;
 		case(3):
 			//Favour
+			//Target player, give card plz
 			return;
 		case(4):
 			//Nope
 			return;
 		case(5):
 			//Shuffle
+			//Deck.shuffle
 			return;
 		case(6):
 			//Skip
+			playedBy.PassTurn();
 			return;
 		case(7):
 			//See The future 3x
+			//Deck.view top 3 cards
 			return;
 		case(8):
 			//TACOCAT

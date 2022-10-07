@@ -3,11 +3,11 @@ import java.util.ArrayList;
 
 public class Game 
 {
-	private ArrayList<Player> players = new ArrayList<Player>();
-	private ArrayList<Player> playersLeft = new ArrayList<Player>();
-	private Deck d;
-	private int currentPlayer = 0;
-	
+	static private ArrayList<Player> players = new ArrayList<Player>();
+	static private ArrayList<Player> playersLeft = new ArrayList<Player>();
+	static private Deck d;
+	static private int currentPlayer = 0;
+	//How the fuck do I access game
 	//init game
 	public Game(ArrayList<Player> p)
 	{
@@ -34,5 +34,13 @@ public class Game
 	public Player getNextPlayer()
 	{
 		return playersLeft.get((currentPlayer+1)%playersLeft.size());
+	}
+	
+	public void recalcPlayers()
+	{
+		for(Player p : playersLeft)
+		{
+			p.SetNextPlayer(playersLeft.get((currentPlayer+1)%playersLeft.size()));
+		}
 	}
 }

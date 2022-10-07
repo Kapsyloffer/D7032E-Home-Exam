@@ -47,10 +47,9 @@ public class Deck
 	}
 	
 	//Players call this on draw
-	public Card draw()
+	public void draw(Player p)
 	{
-		Card c = deck.get(0);
+		p.AddToHand(deck.get(0));
 		deck.remove(0);
-		return c;
 	}
 }
