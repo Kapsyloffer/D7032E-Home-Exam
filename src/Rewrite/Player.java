@@ -9,9 +9,20 @@ public class Player
 	private ArrayList<Card> hand = new ArrayList<Card>();
 	private boolean alive = true;
 	
+	//Somehow assigna en player till ett ID och namn
+	public void addTurns(int t)
+	{
+		turnsLeft += t;
+	}
+	
 	public Player(String n)
 	{
 		name = n;
+	}
+	
+	public void SetID(int i)
+	{
+		PlayerID = i;
 	}
 	
 	public boolean isAlive()
@@ -34,6 +45,7 @@ public class Player
 				{
 					defused = true;
 					hand.remove(i);
+					//Place the kitten somewhere in the deck
 				}
 			}
 			if(!defused)

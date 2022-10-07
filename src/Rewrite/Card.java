@@ -62,12 +62,12 @@ public class Card
 	{
 		switch(type)
 		{
-		case(0):
+		//case(0): Hanteras i player
 			//explode
-			return;
-		case(1):
+			//return;
+		//case(1):
 			//Defuse
-			return;
+			//return;
 		case(2):
 			//Attack 2x
 			return;
