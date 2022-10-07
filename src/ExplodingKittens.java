@@ -11,7 +11,8 @@ public class ExplodingKittens {
 	public ArrayList<Player> players = new ArrayList<Player>();
 	public int secondsToInterruptWithNope = 5;
 
-	enum Card {
+	enum Card 
+	{
 		ExplodingKitten,
 		Defuse,
 		Attack,
