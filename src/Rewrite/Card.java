@@ -16,38 +16,60 @@ public class Card
 		Cattermelon,
 		RainbowRalphingCat,
 		TacoCat,
-		OverweightBikiniCat
+		OverweightBikiniCat,
 	}
+	private cardTypes type;
 	private int maxCards;
-	private int type;
-	public Card(int t, int m)
+	public Card(cardTypes t, int m)
 	{
 		type = t;
 		maxCards = m;
 	}
 	
+	public static cardTypes getType(int index)
+	{
+		return cardTypes.values()[index];
+		//cardTypes.GetValues(cardTypes.GetType())).GetValue(index);
+	}
+	
 	//Då decken byggs så ska vi checka och he in max kort innan shuffle.
-	public int getMax()
+	public static int GetMax(cardTypes t)
 	{
 		//Exploding kitten 4
 		//Defuse 6
-		// Attack 2x 4
+		// ^^ These two are fixed in deck.
+		//Attack 2x 4
 		//Favor 4
-		//Nope 5
 		//Shuffle 4
 		//Skip 4
 		//See the future 3x 5
+		//Nope 5
 		//Cat cards 5 different, 4 each
-		return maxCards; 
+		
+		//This is stupid dumb retarded, but I will fix it later.
+		int m;
+			switch(t)
+			{
+				case SeeTheFuture:
+					m = 5;
+					break;
+				case Nope:
+					m = 5;
+					break;
+				default:
+					m = 4;
+					break;
+			}
+		return m; 
 	}
 	
-	public int getTypes()
+	public static int getTypes()
 	{
-		return 13;
+		return cardTypes.values().length;
 	}
 	
 	//Typen visar vad för kort vi har.
-	public int getType()
+	public cardTypes getType()
 	{
 		return type;
 	}
@@ -62,49 +84,46 @@ public class Card
 	{
 		switch(type)
 		{
-		case(0): 
-			playedBy.Explode();
+		case ExplodingKitten: 
+			//playedBy.Explode();
+			System.out.println("A KITTEN HAS APPEARED!!");
 			return;
-		case(1):
+		case Defuse:
 			//Defuse
 			return;
-		case(2):
-			playedBy.PassTurn();
-			playedBy.GetNextPlayer().addTurns(2);
+			System.out.println("DEFUSE HAS BEEN USED!!");
+		case Attack:
+			//Attacks are supposed to stack. Fix that somehow.
+			System.out.println("ATTACK 2X!!");
+			//playedBy.PassTurn();
+			//playedBy.GetNextPlayer().addTurns(2);
 			return;
-		case(3):
+		case Favor:
+			System.out.println("Favour:");
+			//plaued.TargetPlayer(playedBy);
 			//Favour
 			//Target player, give card plz
 			return;
-		case(4):
+		case Nope:
+			System.out.println("Nopestack");
 			//Nope
 			return;
-		case(5):
+		case Shuffle:
 			//Shuffle
 			//Deck.shuffle
 			return;
-		case(6):
+		case Skip:
 			//Skip
-			playedBy.PassTurn();
+			//playedBy.PassTurn();
 			return;
-		case(7):
+		case SeeTheFuture:
 			//See The future 3x
 			//Deck.view top 3 cards
 			return;
-		case(8):
-			//TACOCAT
-			return;
-		case(9):
-			//Bearded Cat
-			return;
-		case(10):
-			//Rainbow ralphing cat
-			return;
-		case(11):
-			//Hairy Potato Cat
-			return;
-		case(12):
-			//Cattermelon
+		default:
+			//2 av samma
+			//3 av samma
+			//en av varje
 			return;
 		//Mer plats för annat stuff
 		}

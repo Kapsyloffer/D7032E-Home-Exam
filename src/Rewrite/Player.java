@@ -1,80 +1,65 @@
 package Rewrite;
-import java.util.ArrayList;
+import java.util.*; 
+import java.io.*; 
+import java.net.*;
+import java.util.concurrent.*;
 
 public class Player 
 {
-	private String name; //Hi, I'm Paul.
-	private int turnsLeft; //1 då man får turn, 2 om man blir attacked
-	private int PlayerID; //Checka om playerID+1 finns, annars gå tillbaka till 0.
-	private Player NextPlayer; //The target we attack
-	private ArrayList<Card> hand = new ArrayList<Card>();
-	private boolean alive = true;
-	
-	//Somehow assigna en player till ett ID och namn
-	public void addTurns(int t)
-	{
-		turnsLeft += t;
+	public int playerID;
+    public boolean online;
+    public boolean isBot;
+    public Socket connection;
+    public boolean exploded = false;
+    public ObjectInputStream inFromClient;
+    public ObjectOutputStream outToClient;
+    public ArrayList<Card> hand = new ArrayList<Card>();
+    Scanner in = new Scanner(System.in);
+    
+    public Player(int playerID, boolean isBot, Socket connection, ObjectInputStream inFromClient, ObjectOutputStream outToClient)
+    {
+    	this.playerID = playerID; 
+    	this.connection = connection; 
+    	this.inFromClient = inFromClient; 
+    	this.outToClient = outToClient; 
+    	this.isBot = isBot;
+    	//if no connection, then it's a bot. Else if we have connection it's a player.
+    	this.online = (connection == null) ? false: true;
 	}
-	
-	public Player(String n)
-	{
-		name = n;
-	}
-	
-	public void SetID(int i)
-	{
-		PlayerID = i;
-	}
-	
-	public boolean isAlive()
-	{
-		return alive;
-	}
-	
-	//Draw
-	public void AddToHand(Card c)
-	{
-		if(c.getType() != 0)
-		{
-			
-		}
-		else
-		{
-			boolean defused = false;
-			for(int i = 0; i < hand.size(); i++)
-			{
-				if(hand.get(i).getType() == 1)
-				{
-					defused = true;
-					hand.remove(i);
-					//Place the kitten somewhere in the deck
-				}
-			}
-			if(!defused)
-			{
-				
-			}
-			//BOOM
-		}
-	}
-	
-	public void PassTurn()
-	{
-		
-	}
-	
-	public void SetNextPlayer(Player p)
-	{
-		NextPlayer = p;
-	}
-	
-	public Player GetNextPlayer()
-	{
-		return NextPlayer;
-	}
-	
-	public void Explode()
-	{
-		alive = false;
-	}
+    
+    public String TargetPrint()
+    {
+    	return ("ID: " + playerID + " Hand:" + hand.size() + " ");
+    }
+    
+  //Draw
+  	public void AddToHand(Card c)
+  	{
+  		/*if(c.getType(0) )
+  		{
+  			hand.add(c);
+  		}
+  		else
+  		{
+  			boolean defused = false;
+  			for(int i = 0; i < hand.size(); i++)
+  			{
+  				if(hand.get(i).getType() == 1 && !defused)
+  				{
+  					defused = true;
+  					//Ta bort defuse från handen
+  					hand.remove(i);
+  					//Place the kitten somewhere in the deck
+  					
+  				}
+  			}
+  			if(!defused)
+  			{
+  				
+  			}
+  			//BOOM
+  		}*/
+  	}
+    
+    //Messaging & networking bs
 }
