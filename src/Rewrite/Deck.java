@@ -17,7 +17,7 @@ public class Deck
 	//Skip 4
 	//See the future 3x 5
 	//Cat cards 5 different, 4 each
-	public static int[] maxC = new int[] {4, 6, 4, 4, 5, 4, 4, 5, 4, 4, 4, 4, 4};
+	public static int[] maxC = new int[] {4, 6};
 	
 	public void Setup(int players)
 	{
@@ -33,11 +33,11 @@ public class Deck
 			//shuffle the rest into the pile
 			maxC[1] -= players;
 		}
-		Card dummy = new Card(0, 4);
-		for(int i = 0; i < dummy.getTypes(); i++)
+		for(int i = 2; i < Card.getTypes(); i++)
 		{
-			Card card = new Card(i, maxC[i]);
-			for(int j = 0; j < card.getMax(); j++)
+			int max = Card.GetMax(Card.getType(i));
+			Card card = new Card(Card.getType(i), max);
+			for(int j = 0; j < max; j++)
 			{
 				deck.add(card);
 			}

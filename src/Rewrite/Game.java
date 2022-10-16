@@ -1,46 +1,25 @@
 package Rewrite;
-import java.util.ArrayList;
+import java.util.*; 
+import java.io.*; 
+import java.net.*;
+import java.util.concurrent.*;
 
 public class Game 
 {
-	static private ArrayList<Player> players = new ArrayList<Player>();
-	static private ArrayList<Player> playersLeft = new ArrayList<Player>();
-	static private Deck d;
-	static private int currentPlayer = 0;
-	//How the fuck do I access game
-	//init game
-	public Game(ArrayList<Player> p)
+	ArrayList<Player> PlayerList = new ArrayList<Player>();
+	
+	void Target(Player src)
 	{
-		for(Player x : p)
+		System.out.println("Who do you wish to target? \n");
+		for(Player p : PlayerList)
 		{
-			x.SetID(players.size());
-			players.add(x);
+			System.out.println(p.TargetPrint() + "\n");
 		}
-		initGame();
-	}
-	
-	void initGame()
-	{
-		d = new Deck();
-		d.Setup(players.size());
-	}
-	
-	void PassTurn()
-	{
-		currentPlayer = (currentPlayer+1)%playersLeft.size();
-		playersLeft.get(currentPlayer).addTurns(1);
-	}
-	
-	public Player getNextPlayer()
-	{
-		return playersLeft.get((currentPlayer+1)%playersLeft.size());
-	}
-	
-	public void recalcPlayers()
-	{
-		for(Player p : playersLeft)
+		//Get input of Value
+		boolean resolved = false;
+		while (!resolved)
 		{
-			p.SetNextPlayer(playersLeft.get((currentPlayer+1)%playersLeft.size()));
+			
 		}
 	}
 }
