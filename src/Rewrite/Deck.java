@@ -52,4 +52,11 @@ public class Deck
 		p.AddToHand(deck.get(0));
 		deck.remove(0);
 	}
+	
+	public void discard(Player p, Card d)
+	{
+		discard.add(d);
+		p.RemoveFromHand(d);
+		
+	}
 }

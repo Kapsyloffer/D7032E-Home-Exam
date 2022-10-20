@@ -32,7 +32,7 @@ public class Player
     	return ("ID: " + playerID + " Hand:" + hand.size() + " ");
     }
     
-  //Draw
+    //Draw
   	public void AddToHand(Card c)
   	{
   		/*if(c.getType(0) )
@@ -59,6 +59,11 @@ public class Player
   			}
   			//BOOM
   		}*/
+  	}
+  	
+  	public void RemoveFromHand(Card c)
+  	{
+  		hand.remove(c);
   	}
     
     //Messaging & networking bs
