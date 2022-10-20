@@ -32,7 +32,8 @@ public class Card
 		//cardTypes.GetValues(cardTypes.GetType())).GetValue(index);
 	}
 	
-	//Då decken byggs så ska vi checka och he in max kort innan shuffle.
+	//Då decken byggs så ska vi checka och he in max kort innan shuffle. 
+	//Max är by default 4, men man kan göra en exception för korttyp. 
 	public static int GetMax(cardTypes t)
 	{
 		//Exploding kitten 4
@@ -90,8 +91,8 @@ public class Card
 			return;
 		case Defuse:
 			//Defuse
-			return;
 			System.out.println("DEFUSE HAS BEEN USED!!");
+			return;
 		case Attack:
 			//Attacks are supposed to stack. Fix that somehow.
 			System.out.println("ATTACK 2X!!");
