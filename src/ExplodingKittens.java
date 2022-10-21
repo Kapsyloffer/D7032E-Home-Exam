@@ -107,8 +107,8 @@ public class ExplodingKittens
                 } 
                 catch(Exception e){System.out.println(e.getMessage());
                 }
-            return word;
         	}
+            return word;
         }		
 	}
 
@@ -149,7 +149,7 @@ public class ExplodingKittens
 	{
 		if(numPlayers + numBots > 5 || numPlayers + numBots < 2)
 		{
-			system.out.println("Incorrect number of players.");
+			System.out.println("Incorrect number of players.");
 			System.exit(0);
 		}
 		try 
