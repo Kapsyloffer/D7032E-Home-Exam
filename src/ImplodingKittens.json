@@ -1,0 +1,11 @@
+{
+	"cardTypes" : 
+	{
+		"ImplodingKitten" : 1,
+		"Reverse" : 4,
+		"DrawFromTheBottom" : 4,
+		"FeralCat" : 4,
+		"AlterTheFuture" : 4,
+		"TargetedAttack" : 3
+	}
+}
