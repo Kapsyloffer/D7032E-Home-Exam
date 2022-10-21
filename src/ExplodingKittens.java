@@ -29,16 +29,45 @@ public class ExplodingKittens
 		OverweightBikiniCat
 	}
 
+	static HashMap<Card, Integer> maxCards = new HashMap<Card, Integer>();
+	
+	public static void setCards(int p)
+	{
+		//TODO: Gör denna med JSON
+		//Dessa dependar på spelare.
+		maxCards.put(Card.ExplodingKitten, p-1);
+		maxCards.put(Card.Defuse, 6-p);
+
+		//Dessa är basically samma hela tiden, kan läsas in från fil.
+		//Men hur gör vi med expansions?
+		maxCards.put(Card.Attack, 4);
+		maxCards.put(Card.Favor, 4);
+		maxCards.put(Card.Nope, 5);
+		maxCards.put(Card.Shuffle, 4);
+		maxCards.put(Card.Skip, 4);
+		maxCards.put(Card.SeeTheFuture, 5);
+		maxCards.put(Card.HairyPotatoCat, 4);
+		maxCards.put(Card.Cattermelon, 4);
+		maxCards.put(Card.RainbowRalphingCat, 4);
+		maxCards.put(Card.TacoCat, 4);
+		maxCards.put(Card.OverweightBikiniCat, 4);
+	}
+
+
 	class Player 
 	{
         public int playerID;
+
         public boolean online;
         public boolean isBot;
-        public Socket connection;
         public boolean exploded = false;
+
+        public Socket connection;
         public ObjectInputStream inFromClient;
         public ObjectOutputStream outToClient;
+
         public ArrayList<Card> hand = new ArrayList<Card>();
+
         Scanner in = new Scanner(System.in);
  
         public Player(int playerID, boolean isBot, Socket connection, ObjectInputStream inFromClient, ObjectOutputStream outToClient) 
@@ -50,7 +79,10 @@ public class ExplodingKittens
         	this.isBot = isBot;
         	this.online = (connection != null) ? true : false;
 		}
-
+		public void draw()
+		{
+			hand.add(deck.remove(0));
+		}
         public void sendMessage(Object message) 
         {
             if(online) 
@@ -128,6 +160,7 @@ public class ExplodingKittens
 			//Client: Ange IP. -> Bam
 			//Server: Hur många spelare?
 			//Server: check if good. -> print port.
+			
 			System.out.println("Server syntax: java ExplodingKittens numPlayers numBots");
 			System.out.println("Client syntax: IP");
 		}
@@ -157,19 +190,18 @@ public class ExplodingKittens
 	        server(numPlayers, numBots);
 
 			//Create the deck
-			//TODO: Deckbuilder med for loop. Sätt typer i JSON.
-			for(int i=0; i<6-players.size(); i++) {deck.add(Card.Defuse);}
-			for(int i=0; i<4; i++) {deck.add(Card.Attack);}
-			for(int i=0; i<4; i++) {deck.add(Card.Favor);}
-			for(int i=0; i<5; i++) {deck.add(Card.Nope);}
-			for(int i=0; i<4; i++) {deck.add(Card.Shuffle);}
-			for(int i=0; i<4; i++) {deck.add(Card.Skip);}
-			for(int i=0; i<5; i++) {deck.add(Card.SeeTheFuture);}
-			for(int i=0; i<4; i++) {deck.add(Card.HairyPotatoCat);}
-			for(int i=0; i<4; i++) {deck.add(Card.Cattermelon);}
-			for(int i=0; i<4; i++) {deck.add(Card.RainbowRalphingCat);}
-			for(int i=0; i<4; i++) {deck.add(Card.TacoCat);}
-			for(int i=0; i<4; i++) {deck.add(Card.OverweightBikiniCat);}
+			//TODO: Deckbuilder med for loop. Sätt typer i JSON maybe?
+			//Skapa alla maxvärden per kort
+			setCards(numPlayers + numBots);
+
+			for(Map.Entry<Card, Integer> mC : maxCards.entrySet())
+			{
+				//T.ex om key Shuffle har 4 som value stoppar vi in 4 shufflekort.
+				for(int i = 0; i < mC.getValue(); i++)
+				{
+					deck.add(mC.getKey());
+				}
+			}
 			//Why shuffle twice?
 			Collections.shuffle(deck);
 
@@ -179,15 +211,9 @@ public class ExplodingKittens
 				//Draw
 				for(int i=0; i<7; i++) 
 				{
-					player.hand.add(deck.remove(0));
+					player.draw();
 				}
 			}
-			//Add the kittens
-			for(int i=0; i<players.size()-1; i++) 
-				{
-					deck.add(Card.ExplodingKitten);
-				}
-			Collections.shuffle(deck);
 
 	        Random rnd = new Random();
 	        game(rnd.nextInt(players.size()));
@@ -339,10 +365,14 @@ public class ExplodingKittens
 								} 
 								else 
 								{
-									discard.add(drawCard); //we discard them to the bottom of the pile, that way we don't end up with problems of Attack ending up as the last card
+									//we discard them to the bottom of the pile, that way we don't end up with 
+									//problems of Attack ending up as the last card
+									discard.add(drawCard); 
 									discard.addAll(currentPlayer.hand);
+
 									currentPlayer.hand.clear();
-									for(Player p : players) {
+									for(Player p : players) 
+									{
 										p.sendMessage("Player " + currentPlayer.playerID + " exploded");
 									}
 									currentPlayer.exploded = true;
@@ -358,12 +388,12 @@ public class ExplodingKittens
 						else if(response.contains("Two")) 
 						{ //played 2 of a kind - steal random card from target player
 							String[] args = response.split(" ");
-							//TODO: FOR?
-							currentPlayer.hand.remove(Card.valueOf(args[1])); 
-							currentPlayer.hand.remove(Card.valueOf(args[1]));
-
-							discard.add(0, Card.valueOf(args[1]));
-							discard.add(0, Card.valueOf(args[1]));
+							
+							for(int j = 0; j < 2; j++)
+							{
+								currentPlayer.hand.remove(Card.valueOf(args[1])); 
+								discard.add(0, Card.valueOf(args[1]));
+							}
 
 							addToDiscardPile(currentPlayer, "Two of a kind against player " + args[2]);
 							if(checkNrNope() % 2 == 0) 
@@ -380,14 +410,13 @@ public class ExplodingKittens
 						else if(response.contains("Three")) 
 						{ //played 3 of a kind - name a card and force target player to hand one over if they have it
 							String[] args = response.split(" ");
-							//TODO: FOr loop?
-							currentPlayer.hand.remove(Card.valueOf(args[1])); 
-							currentPlayer.hand.remove(Card.valueOf(args[1]));
-							currentPlayer.hand.remove(Card.valueOf(args[1]));
 
-							discard.add(0, Card.valueOf(args[1]));
-							discard.add(0, Card.valueOf(args[1]));
-							discard.add(0, Card.valueOf(args[1]));
+							//TODO: FOr loop?
+							for(int j = 0; j < 3; j++)
+							{
+								currentPlayer.hand.remove(Card.valueOf(args[1])); 
+								discard.add(0, Card.valueOf(args[1]));
+							}
 
 							addToDiscardPile(currentPlayer, "Three of a kind against player " + args[2]);
 							if(checkNrNope() % 2 == 0) {
@@ -534,6 +563,8 @@ public class ExplodingKittens
         Socket aSocket = new Socket(ipAddress, 2048);
         ObjectOutputStream outToServer = new ObjectOutputStream(aSocket.getOutputStream());
         ObjectInputStream inFromServer = new ObjectInputStream(aSocket.getInputStream());
+		//Stänger för att preventa memory leak.
+		aSocket.close();
         //Get the hand of apples from server
         ExecutorService threadpool = Executors.newFixedThreadPool(1);
         Runnable receive = new Runnable() 
