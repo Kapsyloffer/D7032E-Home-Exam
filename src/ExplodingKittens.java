@@ -12,138 +12,32 @@ public class ExplodingKittens
 	public ArrayList<Player> players = new ArrayList<Player>();
 	public int secondsToInterruptWithNope = 5;
 
-	enum Card 
-	{
-		ExplodingKitten,
-		Defuse,
-		Attack,
-		Favor,
-		Nope,
-		Shuffle,
-		Skip,
-		SeeTheFuture,
-		HairyPotatoCat,
-		Cattermelon,
-		RainbowRalphingCat,
-		TacoCat,
-		OverweightBikiniCat
-	}
-
-	static HashMap<Card, Integer> maxCards = new HashMap<Card, Integer>();
+	static HashMap<Card.CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
 	
+	//Problemet är att det hårdkodas fast på olika ställen.
 	public static void setCards(int p)
 	{
 		//TODO: Gör denna med JSON
 		//Dessa dependar på spelare.
-		maxCards.put(Card.ExplodingKitten, p-1);
-		maxCards.put(Card.Defuse, 6-p);
+		maxCards.put(Card.CardType.ExplodingKitten, p-1);
+		maxCards.put(Card.CardType.Defuse, 6-p);
 
 		//Dessa är basically samma hela tiden, kan läsas in från fil.
 		//Men hur gör vi med expansions?
-		maxCards.put(Card.Attack, 4);
-		maxCards.put(Card.Favor, 4);
-		maxCards.put(Card.Nope, 5);
-		maxCards.put(Card.Shuffle, 4);
-		maxCards.put(Card.Skip, 4);
-		maxCards.put(Card.SeeTheFuture, 5);
-		maxCards.put(Card.HairyPotatoCat, 4);
-		maxCards.put(Card.Cattermelon, 4);
-		maxCards.put(Card.RainbowRalphingCat, 4);
-		maxCards.put(Card.TacoCat, 4);
-		maxCards.put(Card.OverweightBikiniCat, 4);
+		maxCards.put(Card.CardType.Attack, 4);
+		maxCards.put(Card.CardType.Favor, 4);
+		maxCards.put(Card.CardType.Nope, 5);
+		maxCards.put(Card.CardType.Shuffle, 4);
+		maxCards.put(Card.CardType.Skip, 4);
+		maxCards.put(Card.CardType.SeeTheFuture, 5);
+		maxCards.put(Card.CardType.HairyPotatoCat, 4);
+		maxCards.put(Card.CardType.Cattermelon, 4);
+		maxCards.put(Card.CardType.RainbowRalphingCat, 4);
+		maxCards.put(Card.CardType.TacoCat, 4);
+		maxCards.put(Card.CardType.OverweightBikiniCat, 4);
 	}
 
-
-	class Player 
-	{
-        public int playerID;
-
-        public boolean online;
-        public boolean isBot;
-        public boolean exploded = false;
-
-        public Socket connection;
-        public ObjectInputStream inFromClient;
-        public ObjectOutputStream outToClient;
-
-        public ArrayList<Card> hand = new ArrayList<Card>();
-
-        Scanner in = new Scanner(System.in);
- 
-        public Player(int playerID, boolean isBot, Socket connection, ObjectInputStream inFromClient, ObjectOutputStream outToClient) 
-        {
-        	this.playerID = playerID; 
-        	this.connection = connection; 
-        	this.inFromClient = inFromClient; 
-        	this.outToClient = outToClient; 
-        	this.isBot = isBot;
-        	this.online = (connection != null) ? true : false;
-		}
-		public void draw()
-		{
-			hand.add(deck.remove(0));
-		}
-        public void sendMessage(Object message) 
-        {
-            if(online) 
-            {
-                try 
-                {
-                	outToClient.writeObject(message);
-                } 
-                catch (Exception e) 
-                {
-                	//Something went wrong oh no
-                }
-            } 
-            else if(!isBot)
-            {
-                System.out.println(message);                
-            }
-        }
-        public String readMessage(boolean interruptable) 
-        {
-            String word = " "; 
-            if(online)
-            {
-                try
-            	{
-                	word = (String) inFromClient.readObject();
-                } 
-                catch (Exception e)
-                {
-                	System.out.println("Reading from client failed: " + e.getMessage());
-                }
-            }
-            else
-            {
-                try 
-                {
-                	if(interruptable) 
-                	{
-    				    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    				    int millisecondsWaited = 0;
-    				    while(!br.ready() && millisecondsWaited<(secondsToInterruptWithNope*1000)) 
-    				    {
-    				    	Thread.sleep(200);
-    				    	millisecondsWaited += 200;
-    				    }
-    				    if(br.ready())
-    				    	return br.readLine();               		
-                	} 
-                	else 
-                	{
-	                	in = new Scanner(System.in); 
-	                	word=in.nextLine();
-                	}
-                } 
-                catch(Exception e){System.out.println(e.getMessage());
-                }
-        	}
-            return word;
-        }		
-	}
-
+	//OK
 	public ExplodingKittens(String[] params) throws Exception 
 	{
 		if(params.length == 2) 
@@ -166,6 +60,7 @@ public class ExplodingKittens
 		}
 	}
 
+	//OK
 	public static void main(String argv[]) 
 	{
 		try 
@@ -178,6 +73,7 @@ public class ExplodingKittens
 		}
 	}
 
+	//OK
 	public void initGame(int numPlayers, int numBots)
 	{
 		if(numPlayers + numBots > 5 || numPlayers + numBots < 2)
@@ -194,12 +90,13 @@ public class ExplodingKittens
 			//Skapa alla maxvärden per kort
 			setCards(numPlayers + numBots);
 
-			for(Map.Entry<Card, Integer> mC : maxCards.entrySet())
+			for(Map.Entry<Card.CardType, Integer> mC : maxCards.entrySet())
 			{
 				//T.ex om key Shuffle har 4 som value stoppar vi in 4 shufflekort.
 				for(int i = 0; i < mC.getValue(); i++)
 				{
-					deck.add(mC.getKey());
+					Card c = new Card(mC.getKey());
+					deck.add(c);
 				}
 			}
 			//Why shuffle twice?
@@ -207,7 +104,8 @@ public class ExplodingKittens
 
 			for(Player player : players) 
 			{
-				player.hand.add(Card.Defuse);
+				Card c = new Card(Card.CardType.Defuse);
+				player.add(c);
 				//Draw
 				for(int i=0; i<7; i++) 
 				{
@@ -232,7 +130,17 @@ public class ExplodingKittens
 		for(Player p : players) 
 		{
 			p.sendMessage("Action: Player " + currentPlayer.playerID + " played " + card);
-			if(p.hand.contains(Card.Nope)) 
+			//Checks if they may nope
+			boolean canNope = false;
+			for(Card c : p.hand)
+			{
+				if (c.getType() == Card.CardType.Nope)
+				{
+					canNope = true;
+					break;
+				}
+			}
+			if(canNope)
 			{ //only give the option to interrupt to those who have a Nope card
 				p.sendMessage("Press <Enter> to play Nope");
 				Runnable task = new Runnable() 
@@ -243,10 +151,17 @@ public class ExplodingKittens
 	        			try 
 	        			{
 			        		String nextMessage = p.readMessage(true); //Read that is interrupted after secondsToInterruptWithNope
-			        		if(!nextMessage.equals(" ") && p.hand.contains(Card.Nope)) 
+			        		if(!nextMessage.equals(" ") && p.hand.contains(Card.CardType.Nope)) 
 			        		{
-		    	    			p.hand.remove(Card.Nope);
-		    	    			discard.add(0, Card.Nope);
+								for(Card c : p.hand)
+								{
+									if (c.getType() == Card.CardType.Nope)
+									{
+										discard.add(c);
+										currentPlayer.hand.remove(c);
+										break;
+									}
+								}
 		    	    			//TODO: He dessa i en funktion?
 		    	    			for(Player notify: players)
 		    	    			{
@@ -279,7 +194,7 @@ public class ExplodingKittens
 	public int checkNrNope() 
 	{
 		int i=0;
-		while(i<discard.size() && discard.get(i)==Card.Nope) 
+		while(i<discard.size() && discard.get(i).getType() == Card.CardType.Nope) 
 		{
 			i++;	
 		}
@@ -303,7 +218,7 @@ public class ExplodingKittens
 					p.sendMessage("It is now the turn of player " + currentPlayer.playerID);
 				}
 			}
-			Collections.sort(currentPlayer.hand);
+			currentPlayer.SortHand();
 
 			for(int i=0; i<numberOfTurnsToTake; i++) 
 			{
@@ -324,38 +239,39 @@ public class ExplodingKittens
 					currentPlayer.sendMessage("Your hand: " + currentPlayer.hand);
 					String yourOptions = "You have the following options:\n";
 					Set<Card> handSet = new HashSet<Card>(currentPlayer.hand);
+
+					//TODO: Fix whatever the fuck this is
 					for(Card card : handSet) 
 					{
 						int count = Collections.frequency(currentPlayer.hand, card);
-						if(count>=2)
-							yourOptions += "\tTwo " + card + " [target] (available targets: " + otherPlayerIDs + ") (Steal random card)\n";
-						if(count>=3)
-							yourOptions += "\tThree " + card + " [target] [Card Type] (available targets: " + otherPlayerIDs + ") (Name and pick a card)\n";
-						if(card == Card.Attack)
-							yourOptions += "\tAttack\n";
-						if(card == Card.Favor)
-							yourOptions += "\tFavor [target] (available targets: " + otherPlayerIDs + ")\n";
-						if(card == Card.Shuffle)
-							yourOptions += "\tShuffle\n";
-						if(card == Card.Skip)
-							yourOptions += "\tSkip\n";
-						if(card == Card.SeeTheFuture)
-							yourOptions += "\tSeeTheFuture\n";
+						//TODO: Lists options, som Attack, Attack, osv. Visar dock common cards.
+						yourOptions += "\t" + card + "\n";
+						
+						//TODO: Fix this. Cause nu gäller det alla.
+							if(count>=2)
+							{
+								yourOptions += "\tTwo " + card + " [target] (available targets: " + otherPlayerIDs + ") (Steal random card)\n";
+							}
+							if(count>=3)
+							{
+								yourOptions += "\tThree " + card + " [target] [Card Type] (available targets: " + otherPlayerIDs + ") (Name and pick a card)\n";
+							}
 					}  
-					yourOptions += "\tPass\n";
 					//We don't need to offer Nope as an option - it's only viable 5 seconds after another card is played and handled elsewhere
 					currentPlayer.sendMessage(yourOptions);
 					response = currentPlayer.readMessage(false);
+					//TODO: CardActions.java or something. Can be made as switch case
 					if(yourOptions.contains(response.replaceAll("\\d",""))) 
-					{ //remove targetID to match vs yourOptions
+					{ 
+						//remove targetID to match vs yourOptions
 						if(response.equals("Pass")) 
 						{ //Draw a card and end turn
 							Card drawCard = deck.remove(0);
-							if(drawCard == Card.ExplodingKitten) 
+							if(drawCard.getType() == Card.CardType.ExplodingKitten) 
 							{
-								if(currentPlayer.hand.contains(Card.Defuse)) 
+								if(currentPlayer.hand.contains(Card.CardType.Defuse)) 
 								{
-									currentPlayer.hand.remove(Card.Defuse);
+									currentPlayer.hand.remove(Card.CardType.Defuse);
 									currentPlayer.sendMessage("You defused the kitten. Where in the deck do you wish to place the ExplodingKitten? [0.." + (deck.size()-1) + "]");
 									deck.add((Integer.valueOf(currentPlayer.readMessage(false))).intValue(), drawCard);
 									for(Player p : players) 
@@ -389,11 +305,12 @@ public class ExplodingKittens
 						{ //played 2 of a kind - steal random card from target player
 							String[] args = response.split(" ");
 							
-							for(int j = 0; j < 2; j++)
+							//TODO: FIX
+							/*for(int j = 0; j < 2; j++)
 							{
 								currentPlayer.hand.remove(Card.valueOf(args[1])); 
 								discard.add(0, Card.valueOf(args[1]));
-							}
+							}*/
 
 							addToDiscardPile(currentPlayer, "Two of a kind against player " + args[2]);
 							if(checkNrNope() % 2 == 0) 
@@ -411,11 +328,11 @@ public class ExplodingKittens
 						{ //played 3 of a kind - name a card and force target player to hand one over if they have it
 							String[] args = response.split(" ");
 
-							//TODO: FOr loop?
-							for(int j = 0; j < 3; j++)
+							//TODO: Fix
+							/*for(int j = 0; j < 3; j++)
 							{
-								currentPlayer.hand.remove(Card.valueOf(args[1])); 
-								discard.add(0, Card.valueOf(args[1]));
+								currentPlayer.hand.remove(Card.CardType.valueOf(args[1])); 
+								discard.add(0, Card.CardType.valueOf(args[1]));
 							}
 
 							addToDiscardPile(currentPlayer, "Three of a kind against player " + args[2]);
@@ -432,12 +349,12 @@ public class ExplodingKittens
 								{
 									currentPlayer.sendMessage("The player did not have any " + aCard);
 								}								
-							}
+							}*/
 						} 
 						else if(response.equals("Attack")) 
 						{
 							int turnsToTake = 0;
-							if(discard.size()>0 && discard.get(0).equals(Card.Attack)) 
+							if(discard.size()>0 && discard.get(0).equals(Card.CardType.Attack)) 
 							{
 								turnsToTake = numberOfTurnsToTake + 2;	
 							} 
@@ -445,8 +362,7 @@ public class ExplodingKittens
 							{
 								turnsToTake = 2;
 							}
-							currentPlayer.hand.remove(Card.Attack);
-							discard.add(0, Card.Attack);
+							currentPlayer.RemoveFromHand(Card.CardType.Attack);
 							addToDiscardPile(currentPlayer, "Attack");
 
 							if(checkNrNope() % 2 == 0) 
@@ -459,8 +375,8 @@ public class ExplodingKittens
 						} 
 						else if(response.contains("Favor")) 
 						{
-							currentPlayer.hand.remove(Card.Favor);
-							discard.add(0, Card.Favor);
+							//This adds to the pile too
+							currentPlayer.RemoveFromHand(Card.CardType.Favor);
 
 							String[] args = response.split(" ");
 							Player target = players.get((Integer.valueOf(args[1])).intValue());
@@ -474,7 +390,7 @@ public class ExplodingKittens
 									viableOption=true; //special case - target has no cards to give
 								}
 
-								while(!viableOption) 
+								/*while(!viableOption) 
 								{
 									target.sendMessage("Your hand: " + target.hand);
 									target.sendMessage("Give a card to Player " + currentPlayer.playerID);
@@ -490,13 +406,12 @@ public class ExplodingKittens
 									{
 										target.sendMessage("Not a viable option, try again");
 									}
-								}								
+								}	*/						
 							}
 						} 
 						else if(response.equals("Shuffle")) 
 						{
-							discard.add(0, Card.Shuffle);
-							currentPlayer.hand.remove(Card.Shuffle);
+							currentPlayer.RemoveFromHand(Card.CardType.Shuffle);
 							addToDiscardPile(currentPlayer, "Shuffle");
 							if(checkNrNope() % 2 == 0) 
 							{
@@ -505,17 +420,16 @@ public class ExplodingKittens
 						} 
 						else if(response.equals("Skip")) 
 						{
-							currentPlayer.hand.remove(Card.Skip);
-							discard.add(0, Card.Skip);
+							currentPlayer.RemoveFromHand(Card.CardType.Skip);
 							addToDiscardPile(currentPlayer, "Skip");
 							if(checkNrNope() % 2 == 0) 
 							{
 								break; //Exit the while loop
 							}
-						} else if(response.equals("SeeTheFuture")) 
+						} 
+						else if(response.equals("SeeTheFuture")) 
 						{
-							currentPlayer.hand.remove(Card.SeeTheFuture);
-							discard.add(0, Card.SeeTheFuture);
+							currentPlayer.RemoveFromHand(Card.CardType.Favor);
 							addToDiscardPile(currentPlayer, "SeeTheFuture");
 
 							if(checkNrNope() % 2 == 0) 
