@@ -3,6 +3,7 @@ import java.util.*;
 import java.io.*; 
 import java.net.*;
 import java.util.concurrent.*;
+import Rewrite.Card.*;
 
 public class ExplodingKittens 
 {
@@ -10,6 +11,7 @@ public class ExplodingKittens
 	public static int numberOfTurnsToTake = 1; //attacked?
 	public ArrayList<Player> players = new ArrayList<Player>();
 	public int secondsToInterruptWithNope = 5;
+	private Deck deck;
 
 	//OK
 	public ExplodingKittens(String[] params) throws Exception 
@@ -24,13 +26,13 @@ public class ExplodingKittens
 		} 
 		else 
 		{
+			this.initGame(3, 1);
 			//TODO: Prompt, vill du vara server eller client?
 			//Client: Ange IP. -> Bam
 			//Server: Hur många spelare?
 			//Server: check if good. -> print port.
-			
-			System.out.println("Server syntax: java ExplodingKittens numPlayers numBots");
-			System.out.println("Client syntax: IP");
+			//System.out.println("Server syntax: java ExplodingKittens numPlayers numBots");
+			//System.out.println("Client syntax: IP");
 		}
 	}
 
@@ -57,14 +59,15 @@ public class ExplodingKittens
 		}
 		try 
 		{
-	        server(numPlayers, numBots);
+	        //server(numPlayers, numBots);
 
 			//Create the deck
 			//TODO: Deckbuilder med for loop. Sätt typer i JSON maybe?
 			//Skapa alla maxvärden per kort
 			
 			//Deck.InitDeck();
-			
+			//Initiates a deck
+			new Deck(5).initDeck();
 
 	        Random rnd = new Random();
 	        game(rnd.nextInt(players.size()));
@@ -88,7 +91,7 @@ public class ExplodingKittens
 			boolean canNope = false;
 			for(Card c : p.hand)
 			{
-				if (c.getType() == Card.CardType.Nope)
+				if (c.getType() == CardType.Nope)
 				{
 					canNope = true;
 					break;

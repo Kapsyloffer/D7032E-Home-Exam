@@ -11,6 +11,8 @@ public class Deck
     public Deck(int p)
     {
         this.players = p;
+        //Initiate deck
+        setCards(this.players);
     }
 
 	//Problemet är att det hårdkodas fast på olika ställen.
@@ -40,12 +42,13 @@ public class Deck
 	}
 
     //Builds the deck.
-    public void InitDeck()
+    public void initDeck()
     {
-        //Initiate deck
-        setCards(players);
+        //Clear out the deck
+        cards = new ArrayList<Card>();
         for(Map.Entry<Card.CardType, Integer> mC : maxCards.entrySet())
         {
+            System.out.println(mC.getKey() + " " + mC.getValue());
             //T.ex om key Shuffle har 4 som value stoppar vi in 4 shufflekort.
             for(int i = 0; i < mC.getValue(); i++)
             {
@@ -72,5 +75,10 @@ public class Deck
     public static ArrayList<Card> getDeck()
     {
         return cards;
+    }
+
+    public static Card draw()
+    {
+        return cards.remove(0);
     }
 }
