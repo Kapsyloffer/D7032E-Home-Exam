@@ -5,7 +5,7 @@ import Rewrite.Card.*;
 public class Deck 
 {
     private static HashMap<CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
-    private ArrayList<Card> cards = new ArrayList<Card>();
+    private static ArrayList<Card> cards = new ArrayList<Card>();
 	private int players;
 
     public Deck(int p)
@@ -24,13 +24,14 @@ public class Deck
 		//Dessa är basically samma hela tiden, kan läsas in från fil.
 		//Men hur gör vi med expansions?
 
-        //Vanilla
+        //Vanilla cards
 		maxCards.put(CardType.Attack, 4);
 		maxCards.put(CardType.Favor, 4);
 		maxCards.put(CardType.Nope, 5);
 		maxCards.put(CardType.Shuffle, 4);
 		maxCards.put(CardType.Skip, 4);
 		maxCards.put(CardType.SeeTheFuture, 5);
+        //Vanillas
 		maxCards.put(CardType.HairyPotatoCat, 4);
 		maxCards.put(CardType.Cattermelon, 4);
 		maxCards.put(CardType.RainbowRalphingCat, 4);
@@ -66,5 +67,10 @@ public class Deck
                 player.draw();
             }
         }*/ 
+    }
+
+    public static ArrayList<Card> getDeck()
+    {
+        return cards;
     }
 }

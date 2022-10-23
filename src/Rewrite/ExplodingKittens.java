@@ -3,14 +3,10 @@ import java.util.*;
 import java.io.*; 
 import java.net.*;
 import java.util.concurrent.*;
-import Rewrite.Card.*;
-import Rewrite.Player.*;
 
 public class ExplodingKittens 
 {
     public ServerSocket aSocket;
-	public static ArrayList<Card> deck = new ArrayList<Card>();
-	public static ArrayList<Card> discard = new ArrayList<Card>();
 	public static int numberOfTurnsToTake = 1; //attacked?
 	public ArrayList<Player> players = new ArrayList<Player>();
 	public int secondsToInterruptWithNope = 5;
@@ -83,7 +79,7 @@ public class ExplodingKittens
 	public void addToDiscardPile(Player currentPlayer, String card) throws Exception 
 	{
 		//After an interruptable card is played everyone has 5 seconds to play Nope
-		int nopePlayed = checkNrNope();
+		int nopePlayed = Discard.Nopes();
 		ExecutorService threadpool = Executors.newFixedThreadPool(players.size());
 		for(Player p : players) 
 		{
@@ -106,10 +102,11 @@ public class ExplodingKittens
 		        	@Override
 		        	public void run() 
 		        	{
-	        			try 
+	        			/*try 
 	        			{
 			        		String nextMessage = p.readMessage(true); //Read that is interrupted after secondsToInterruptWithNope
-			        		if(!nextMessage.equals(" ") && p.hand.contains(CardType.Nope)) 
+			        		//TODO: Rewrite this
+							if(!nextMessage.equals(" ") && p.hand.contains(CardType.Nope)) 
 			        		{
 								for(Card c : p.hand)
 								{
@@ -128,7 +125,7 @@ public class ExplodingKittens
 			        		}
 	        			} catch(Exception e) {
 	        				System.out.println("addToDiscardPile: " +e.getMessage());
-	        			}
+	        			}*/
 	        		}
 	        	};
             	threadpool.execute(task);
@@ -139,7 +136,7 @@ public class ExplodingKittens
 		{
 			notify.sendMessage("The timewindow to play Nope passed");
 		}
-		if(checkNrNope()>nopePlayed) 
+		if(Discard.Nopes()>nopePlayed) 
 		{
 			for(Player notify: players)
 			{
@@ -149,270 +146,22 @@ public class ExplodingKittens
 		}
 	}
 
-	public int checkNrNope() 
-	{
-		int i=0;
-		while(i<discard.size() && discard.get(i).getType() == Card.CardType.Nope) 
-		{
-			i++;	
-		}
-		return i;
-	}
-
 	public void game(int startPlayer) throws Exception 
 	{
 		Player currentPlayer = players.get(startPlayer);
 		int playersLeft = players.size();
-		do 
-		{ //while playersLeft>1
-			for(Player p : players) 
-			{
-				if(p == currentPlayer)
-				{
-					p.sendMessage("It is your turn");
-				}
-				else
-				{
-					p.sendMessage("It is now the turn of player " + currentPlayer.playerID);
-				}
-			}
-			currentPlayer.SortHand();
 
-			for(int i=0; i<numberOfTurnsToTake; i++) 
-			{
-				String otherPlayerIDs = "PlayerID: ";
-				for(Player p : players) 
-				{
-					if(p.playerID != currentPlayer.playerID)
-					{
-						otherPlayerIDs += p.playerID + " ";
-					}
-				}
-
-				String response = "";
-				while(!response.equalsIgnoreCase("pass")) 
-				{
-					int turnsLeft = numberOfTurnsToTake-i;
-					currentPlayer.sendMessage("\nYou have " + turnsLeft + ((turnsLeft>1)?" turns":" turn") + " to take");
-					currentPlayer.sendMessage("Your hand: " + currentPlayer.hand);
-					String yourOptions = "You have the following options:\n";
-					Set<Card> handSet = new HashSet<Card>(currentPlayer.hand);
-
-					//TODO: Fix whatever the fuck this is
-					for(Card card : handSet) 
-					{
-						int count = Collections.frequency(currentPlayer.hand, card);
-						//TODO: Lists options, som Attack, Attack, osv. Visar dock common cards.
-						yourOptions += "\t" + card + "\n";
-						
-						//TODO: Fix this. Cause nu gäller det alla.
-							if(count>=2)
-							{
-								yourOptions += "\tTwo " + card + " [target] (available targets: " + otherPlayerIDs + ") (Steal random card)\n";
-							}
-							if(count>=3)
-							{
-								yourOptions += "\tThree " + card + " [target] [Card Type] (available targets: " + otherPlayerIDs + ") (Name and pick a card)\n";
-							}
-					}  
-					//We don't need to offer Nope as an option - it's only viable 5 seconds after another card is played and handled elsewhere
-					currentPlayer.sendMessage(yourOptions);
-					response = currentPlayer.readMessage(false);
-					//TODO: CardActions.java or something. Can be made as switch case
-					if(yourOptions.contains(response.replaceAll("\\d",""))) 
-					{ 
-						//remove targetID to match vs yourOptions
-						if(response.equals("Pass")) 
-						{ //Draw a card and end turn
-							Card drawCard = deck.remove(0);
-							if(drawCard.getType() == CardType.ExplodingKitten) 
-							{
-								if(currentPlayer.hand.contains(CardType.Defuse)) 
-								{
-									currentPlayer.hand.remove(CardType.Defuse);
-									currentPlayer.sendMessage("You defused the kitten. Where in the deck do you wish to place the ExplodingKitten? [0.." + (deck.size()-1) + "]");
-									deck.add((Integer.valueOf(currentPlayer.readMessage(false))).intValue(), drawCard);
-									for(Player p : players) 
-									{
-										p.sendMessage("Player " + currentPlayer.playerID + " successfully defused a kitten");
-									}
-								} 
-								else 
-								{
-									//we discard them to the bottom of the pile, that way we don't end up with 
-									//problems of Attack ending up as the last card
-									discard.add(drawCard); 
-									discard.addAll(currentPlayer.hand);
-
-									currentPlayer.hand.clear();
-									for(Player p : players) 
-									{
-										p.sendMessage("Player " + currentPlayer.playerID + " exploded");
-									}
-									currentPlayer.exploded = true;
-									playersLeft--;
-								}
-							} 
-							else 
-							{
-								currentPlayer.hand.add(drawCard);
-								currentPlayer.sendMessage("You drew: " + drawCard);
-							}
-						} 
-						else if(response.contains("Two")) 
-						{ //played 2 of a kind - steal random card from target player
-							String[] args = response.split(" ");
-							
-							//TODO: FIX
-							/*for(int j = 0; j < 2; j++)
-							{
-								currentPlayer.hand.remove(Card.valueOf(args[1])); 
-								discard.add(0, Card.valueOf(args[1]));
-							}*/
-
-							addToDiscardPile(currentPlayer, "Two of a kind against player " + args[2]);
-							if(checkNrNope() % 2 == 0) 
-							{
-								Player target = players.get((Integer.valueOf(args[2])).intValue());
-						        Random rnd = new Random();
-						        Card aCard = target.hand.remove(rnd.nextInt(target.hand.size()-1));
-
-						        currentPlayer.hand.add(aCard);
-						        target.sendMessage("You gave " + aCard + " to player " + currentPlayer.playerID);
-						        currentPlayer.sendMessage("You received " + aCard + " from player " + target.playerID);								
-							}
-						} 
-						else if(response.contains("Three")) 
-						{ //played 3 of a kind - name a card and force target player to hand one over if they have it
-							String[] args = response.split(" ");
-
-							//TODO: Fix
-							/*for(int j = 0; j < 3; j++)
-							{
-								currentPlayer.hand.remove(Card.CardType.valueOf(args[1])); 
-								discard.add(0, Card.CardType.valueOf(args[1]));
-							}
-
-							addToDiscardPile(currentPlayer, "Three of a kind against player " + args[2]);
-							if(checkNrNope() % 2 == 0) {
-								Player target = players.get((Integer.valueOf(args[2])).intValue());
-								Card aCard = Card.valueOf(args[3]);
-								if(target.hand.contains(aCard)) {
-									target.hand.remove(aCard);
-									currentPlayer.hand.add(aCard);
-						        	target.sendMessage("Player " + currentPlayer.playerID + " stole " + aCard);
-						        	currentPlayer.sendMessage("You received " + aCard + " from player " + target.playerID);										
-								} 
-								else 
-								{
-									currentPlayer.sendMessage("The player did not have any " + aCard);
-								}								
-							}*/
-						} 
-						else if(response.equals("Attack")) 
-						{
-							int turnsToTake = 0;
-							if(discard.size()>0 && discard.get(0).equals(Card.CardType.Attack)) 
-							{
-								turnsToTake = numberOfTurnsToTake + 2;	
-							} 
-							else 
-							{
-								turnsToTake = 2;
-							}
-							currentPlayer.RemoveFromHand(Card.CardType.Attack);
-							addToDiscardPile(currentPlayer, "Attack");
-
-							if(checkNrNope() % 2 == 0) 
-							{
-								numberOfTurnsToTake = turnsToTake; //do not modify if Nope
-								i = numberOfTurnsToTake; //ugly hack - make sure we also exit the for loop
-								response="Pass"; //part of the ugly hack
-								break; //exit the while-loop and move to the next player - do not draw.								
-							}
-						} 
-						else if(response.contains("Favor")) 
-						{
-							//This adds to the pile too
-							currentPlayer.RemoveFromHand(Card.CardType.Favor);
-
-							String[] args = response.split(" ");
-							Player target = players.get((Integer.valueOf(args[1])).intValue());
-
-							addToDiscardPile(currentPlayer, "Favor player " + target.playerID);
-							if(checkNrNope() % 2 == 0) 
-							{
-								boolean viableOption = false;
-								if(target.hand.size()==0)
-								{
-									viableOption=true; //special case - target has no cards to give
-								}
-
-								/*while(!viableOption) 
-								{
-									target.sendMessage("Your hand: " + target.hand);
-									target.sendMessage("Give a card to Player " + currentPlayer.playerID);
-									String tres = target.readMessage(false);
-
-									if(target.hand.contains(Card.valueOf(tres))) 
-									{
-										viableOption = true;
-										currentPlayer.hand.add(Card.valueOf(tres));
-										target.hand.remove(Card.valueOf(tres));
-									} 
-									else 
-									{
-										target.sendMessage("Not a viable option, try again");
-									}
-								}	*/						
-							}
-						} 
-						else if(response.equals("Shuffle")) 
-						{
-							currentPlayer.RemoveFromHand(Card.CardType.Shuffle);
-							addToDiscardPile(currentPlayer, "Shuffle");
-							if(checkNrNope() % 2 == 0) 
-							{
-								Collections.shuffle(deck);
-							}
-						} 
-						else if(response.equals("Skip")) 
-						{
-							currentPlayer.RemoveFromHand(Card.CardType.Skip);
-							addToDiscardPile(currentPlayer, "Skip");
-							if(checkNrNope() % 2 == 0) 
-							{
-								break; //Exit the while loop
-							}
-						} 
-						else if(response.equals("SeeTheFuture")) 
-						{
-							currentPlayer.RemoveFromHand(Card.CardType.Favor);
-							addToDiscardPile(currentPlayer, "SeeTheFuture");
-
-							if(checkNrNope() % 2 == 0) 
-							{
-								currentPlayer.sendMessage("The top 3 cards are: " + deck.get(0) + " " + deck.get(1) + " " + deck.get(2));
-							}							
-						} 
-					} 
-					else 
-					{
-						currentPlayer.sendMessage("Not a viable option, try again");
-					}
-					if(i==(numberOfTurnsToTake-1))
-					{
-						numberOfTurnsToTake=1; //We have served all of our turns, reset it for the next player
-					}
-				}
-			}
-			do 
-			{ 
-				//next player that is still in the game
-				int nextID=((currentPlayer.playerID+1)<players.size()?(currentPlayer.playerID)+1:0);
-				currentPlayer = players.get(nextID);
-			} 
-			while(currentPlayer.exploded && playersLeft>1);
+		//TODO: REWRITE THIS ENTIRE THING
+		//So what does it do?
+		//While players left > 1, keep playing. OK
+		//Whose turn is it?
+		//The player whose turn it is gets to see their possible plays
+		//The actions are made here. Bad.
+		//When passed, check if another player is still in the game.
+		//If no players, declare winner.
+		do
+		{
+			
 		} 
 		while(playersLeft>1);
 

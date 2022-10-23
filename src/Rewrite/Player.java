@@ -2,7 +2,6 @@ package Rewrite;
 import java.util.*; 
 import java.io.*; 
 import java.net.*;
-import java.util.concurrent.*;
 
 import Rewrite.Card.CardType;
 public class Player
@@ -37,7 +36,7 @@ public class Player
     }
     public void draw()
     {
-        hand.add(ExplodingKittens.deck.remove(0));
+        hand.add(Deck.getDeck().remove(0));
     }
     public void add(Card c)
     {
@@ -60,7 +59,7 @@ public class Player
         {
             if(c.getType() == t)
             {
-                ExplodingKittens.discard.add(c);
+                Discard.Add(c);
                 hand.remove(c);
                 break;
             }
