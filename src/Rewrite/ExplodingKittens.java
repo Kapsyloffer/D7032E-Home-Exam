@@ -2,6 +2,8 @@ import java.util.*;
 import java.io.*; 
 import java.net.*;
 import java.util.concurrent.*;
+import Rewrite.Player.*;
+import Rewrite.Card.*;
 
 public class ExplodingKittens 
 {
@@ -12,29 +14,29 @@ public class ExplodingKittens
 	public ArrayList<Player> players = new ArrayList<Player>();
 	public int secondsToInterruptWithNope = 5;
 
-	static HashMap<Card.CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
+	static HashMap<CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
 	
 	//Problemet är att det hårdkodas fast på olika ställen.
 	public static void setCards(int p)
 	{
 		//TODO: Gör denna med JSON
 		//Dessa dependar på spelare.
-		maxCards.put(Card.CardType.ExplodingKitten, p-1);
-		maxCards.put(Card.CardType.Defuse, 6-p);
+		maxCards.put(CardType.ExplodingKitten, p-1);
+		maxCards.put(CardType.Defuse, 6-p);
 
 		//Dessa är basically samma hela tiden, kan läsas in från fil.
 		//Men hur gör vi med expansions?
-		maxCards.put(Card.CardType.Attack, 4);
-		maxCards.put(Card.CardType.Favor, 4);
-		maxCards.put(Card.CardType.Nope, 5);
-		maxCards.put(Card.CardType.Shuffle, 4);
-		maxCards.put(Card.CardType.Skip, 4);
-		maxCards.put(Card.CardType.SeeTheFuture, 5);
-		maxCards.put(Card.CardType.HairyPotatoCat, 4);
-		maxCards.put(Card.CardType.Cattermelon, 4);
-		maxCards.put(Card.CardType.RainbowRalphingCat, 4);
-		maxCards.put(Card.CardType.TacoCat, 4);
-		maxCards.put(Card.CardType.OverweightBikiniCat, 4);
+		maxCards.put(CardType.Attack, 4);
+		maxCards.put(CardType.Favor, 4);
+		maxCards.put(CardType.Nope, 5);
+		maxCards.put(CardType.Shuffle, 4);
+		maxCards.put(CardType.Skip, 4);
+		maxCards.put(CardType.SeeTheFuture, 5);
+		maxCards.put(CardType.HairyPotatoCat, 4);
+		maxCards.put(CardType.Cattermelon, 4);
+		maxCards.put(CardType.RainbowRalphingCat, 4);
+		maxCards.put(CardType.TacoCat, 4);
+		maxCards.put(CardType.OverweightBikiniCat, 4);
 	}
 
 	//OK

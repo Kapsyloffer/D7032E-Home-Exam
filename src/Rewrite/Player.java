@@ -3,68 +3,119 @@ import java.util.*;
 import java.io.*; 
 import java.net.*;
 import java.util.concurrent.*;
-
-public class Player 
+public class Player
 {
-	public int playerID;
+    public int playerID;
+
     public boolean online;
     public boolean isBot;
-    public Socket connection;
     public boolean exploded = false;
+
+    public Socket connection;
     public ObjectInputStream inFromClient;
     public ObjectOutputStream outToClient;
+
     public ArrayList<Card> hand = new ArrayList<Card>();
+
     Scanner in = new Scanner(System.in);
-    
-    public Player(int playerID, boolean isBot, Socket connection, ObjectInputStream inFromClient, ObjectOutputStream outToClient)
+
+    public Player(int playerID, boolean isBot, Socket connection, ObjectInputStream inFromClient, ObjectOutputStream outToClient) 
     {
-    	this.playerID = playerID; 
-    	this.connection = connection; 
-    	this.inFromClient = inFromClient; 
-    	this.outToClient = outToClient; 
-    	this.isBot = isBot;
-    	//if no connection, then it's a bot. Else if we have connection it's a player.
-    	this.online = (connection == null) ? false: true;
-	}
-    
-    public String TargetPrint()
-    {
-    	return ("ID: " + playerID + " Hand:" + hand.size() + " ");
+        this.playerID = playerID; 
+        this.connection = connection; 
+        this.inFromClient = inFromClient; 
+        this.outToClient = outToClient; 
+        this.isBot = isBot;
+        this.online = (connection != null) ? true : false;
     }
-    
-    //Draw
-  	public void AddToHand(Card c)
-  	{
-  		/*if(c.getType(0) )
-  		{
-  			hand.add(c);
-  		}
-  		else
-  		{
-  			boolean defused = false;
-  			for(int i = 0; i < hand.size(); i++)
-  			{
-  				if(hand.get(i).getType() == 1 && !defused)
-  				{
-  					defused = true;
-  					//Ta bort defuse från handen
-  					hand.remove(i);
-  					//Place the kitten somewhere in the deck
-  					
-  				}
-  			}
-  			if(!defused)
-  			{
-  				
-  			}
-  			//BOOM
-  		}*/
-  	}
-  	
-  	public void RemoveFromHand(Card c)
-  	{
-  		hand.remove(c);
-  	}
-    
-    //Messaging & networking bs
+
+    public void SortHand()
+    {
+        hand.sort(null);
+    }
+    public void draw()
+    {
+        hand.add(ExplodingKittens.deck.remove(0));
+    }
+    public void add(Card c)
+    {
+        hand.add(c);
+    }
+    public boolean HasNope()
+    {
+        
+    }
+    public void RemoveFromHand(Card.CardType t)
+    {
+        for(Card c : hand)
+        {
+            if(c.getType() == t)
+            {
+                ExplodingKittens.discard.add(c);
+                hand.remove(c);
+                break;
+            }
+        }
+    }
+    public void sendMessage(Object message) 
+    {
+        if(online) 
+        {
+            try 
+            {
+                outToClient.writeObject(message);
+            } 
+            catch (Exception e) 
+            {
+                //Something went wrong oh no
+            }
+        } 
+        else if(!isBot)
+        {
+            System.out.println(message);                
+        }
+    }
+    public String readMessage(boolean interruptable) 
+    {
+        String word = " "; 
+        if(online)
+        {
+            try
+            {
+                word = (String) inFromClient.readObject();
+            } 
+            catch (Exception e)
+            {
+                System.out.println("Reading from client failed: " + e.getMessage());
+            }
+        }
+        else
+        {
+            try 
+            {
+                if(interruptable) 
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                    int millisecondsWaited = 0;
+                    //TODO: Fixa den här.
+                    while(!br.ready() && millisecondsWaited<(5*1000)) 
+                    {
+                        Thread.sleep(200);
+                        millisecondsWaited += 200;
+                    }
+                    if(br.ready())
+                        return br.readLine();               		
+                } 
+                else 
+                {
+                    in = new Scanner(System.in); 
+                    word=in.nextLine();
+                }
+            } 
+            catch(Exception e){System.out.println(e.getMessage());
+            }
+        }
+        return word;
+    }
+
 }
