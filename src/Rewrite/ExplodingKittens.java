@@ -1,9 +1,10 @@
+package Rewrite;
 import java.util.*; 
 import java.io.*; 
 import java.net.*;
 import java.util.concurrent.*;
-import Rewrite.Player.*;
 import Rewrite.Card.*;
+import Rewrite.Player.*;
 
 public class ExplodingKittens 
 {
@@ -13,31 +14,6 @@ public class ExplodingKittens
 	public static int numberOfTurnsToTake = 1; //attacked?
 	public ArrayList<Player> players = new ArrayList<Player>();
 	public int secondsToInterruptWithNope = 5;
-
-	static HashMap<CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
-	
-	//Problemet är att det hårdkodas fast på olika ställen.
-	public static void setCards(int p)
-	{
-		//TODO: Gör denna med JSON
-		//Dessa dependar på spelare.
-		maxCards.put(CardType.ExplodingKitten, p-1);
-		maxCards.put(CardType.Defuse, 6-p);
-
-		//Dessa är basically samma hela tiden, kan läsas in från fil.
-		//Men hur gör vi med expansions?
-		maxCards.put(CardType.Attack, 4);
-		maxCards.put(CardType.Favor, 4);
-		maxCards.put(CardType.Nope, 5);
-		maxCards.put(CardType.Shuffle, 4);
-		maxCards.put(CardType.Skip, 4);
-		maxCards.put(CardType.SeeTheFuture, 5);
-		maxCards.put(CardType.HairyPotatoCat, 4);
-		maxCards.put(CardType.Cattermelon, 4);
-		maxCards.put(CardType.RainbowRalphingCat, 4);
-		maxCards.put(CardType.TacoCat, 4);
-		maxCards.put(CardType.OverweightBikiniCat, 4);
-	}
 
 	//OK
 	public ExplodingKittens(String[] params) throws Exception 
@@ -90,30 +66,9 @@ public class ExplodingKittens
 			//Create the deck
 			//TODO: Deckbuilder med for loop. Sätt typer i JSON maybe?
 			//Skapa alla maxvärden per kort
-			setCards(numPlayers + numBots);
-
-			for(Map.Entry<Card.CardType, Integer> mC : maxCards.entrySet())
-			{
-				//T.ex om key Shuffle har 4 som value stoppar vi in 4 shufflekort.
-				for(int i = 0; i < mC.getValue(); i++)
-				{
-					Card c = new Card(mC.getKey());
-					deck.add(c);
-				}
-			}
-			//Why shuffle twice?
-			Collections.shuffle(deck);
-
-			for(Player player : players) 
-			{
-				Card c = new Card(Card.CardType.Defuse);
-				player.add(c);
-				//Draw
-				for(int i=0; i<7; i++) 
-				{
-					player.draw();
-				}
-			}
+			
+			//Deck.InitDeck();
+			
 
 	        Random rnd = new Random();
 	        game(rnd.nextInt(players.size()));
@@ -123,7 +78,8 @@ public class ExplodingKittens
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
+//TODO: FUck this in the ass. Stupid ass.
 	public void addToDiscardPile(Player currentPlayer, String card) throws Exception 
 	{
 		//After an interruptable card is played everyone has 5 seconds to play Nope
@@ -153,11 +109,11 @@ public class ExplodingKittens
 	        			try 
 	        			{
 			        		String nextMessage = p.readMessage(true); //Read that is interrupted after secondsToInterruptWithNope
-			        		if(!nextMessage.equals(" ") && p.hand.contains(Card.CardType.Nope)) 
+			        		if(!nextMessage.equals(" ") && p.hand.contains(CardType.Nope)) 
 			        		{
 								for(Card c : p.hand)
 								{
-									if (c.getType() == Card.CardType.Nope)
+									if (c.getType() == CardType.Nope)
 									{
 										discard.add(c);
 										currentPlayer.hand.remove(c);
@@ -269,11 +225,11 @@ public class ExplodingKittens
 						if(response.equals("Pass")) 
 						{ //Draw a card and end turn
 							Card drawCard = deck.remove(0);
-							if(drawCard.getType() == Card.CardType.ExplodingKitten) 
+							if(drawCard.getType() == CardType.ExplodingKitten) 
 							{
-								if(currentPlayer.hand.contains(Card.CardType.Defuse)) 
+								if(currentPlayer.hand.contains(CardType.Defuse)) 
 								{
-									currentPlayer.hand.remove(Card.CardType.Defuse);
+									currentPlayer.hand.remove(CardType.Defuse);
 									currentPlayer.sendMessage("You defused the kitten. Where in the deck do you wish to place the ExplodingKitten? [0.." + (deck.size()-1) + "]");
 									deck.add((Integer.valueOf(currentPlayer.readMessage(false))).intValue(), drawCard);
 									for(Player p : players) 

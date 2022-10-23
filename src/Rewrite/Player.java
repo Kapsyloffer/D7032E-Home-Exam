@@ -3,6 +3,8 @@ import java.util.*;
 import java.io.*; 
 import java.net.*;
 import java.util.concurrent.*;
+
+import Rewrite.Card.CardType;
 public class Player
 {
     public int playerID;
@@ -43,7 +45,14 @@ public class Player
     }
     public boolean HasNope()
     {
-        
+        for(Card c : hand)
+        {
+            if (c.getType() == CardType.Nope)
+            {
+                return true;
+            }
+        }
+        return false;
     }
     public void RemoveFromHand(Card.CardType t)
     {
