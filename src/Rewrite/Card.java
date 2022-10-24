@@ -1,10 +1,12 @@
 package Rewrite;
-public class Card 
+public class Card
 {
     public enum CardType 
 	{
+		//Dessa är speciella. Hantera instantly.
 		ExplodingKitten,
 		Defuse,
+		//Not these tho
 		Attack,
 		Favor,
 		Nope,
@@ -26,7 +28,7 @@ public class Card
 
     public void Action()
     {
-        return;
+		new CardAction(this.cType);
     }
 
     public CardType getType()

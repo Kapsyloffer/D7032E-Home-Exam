@@ -30,6 +30,17 @@ public class Player
         this.online = (connection != null) ? true : false;
     }
 
+    //Kills em
+    public void KABOOM()
+    {
+        exploded = true;
+        //Stoppar hela handen i discard
+        for(Card c : hand)
+        {
+            Discard.Add(c);
+        }
+    }
+
     public void SortHand()
     {
         hand.sort(null);

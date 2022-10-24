@@ -7,6 +7,7 @@ public class Deck
     private static HashMap<CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
     private static ArrayList<Card> cards = new ArrayList<Card>();
 	private int players;
+    private boolean haveBeenSet = false;
 
     public Deck(int p)
     {
@@ -18,28 +19,33 @@ public class Deck
 	//Problemet är att det hårdkodas fast på olika ställen.
 	private void setCards(int p)
 	{
-		//TODO: Gör denna med JSON
-		//Dessa dependar på spelare.
-		maxCards.put(CardType.ExplodingKitten, p-1);
-		maxCards.put(CardType.Defuse, 6-p);
+        //Bara för att preventa double adding
+        if(!haveBeenSet)
+        {
+            //TODO: Gör denna med JSON
+            //Dessa dependar på spelare.
+            maxCards.put(CardType.ExplodingKitten, p-1);
+            maxCards.put(CardType.Defuse, 6-p);
 
-		//Dessa är basically samma hela tiden, kan läsas in från fil.
-		//Men hur gör vi med expansions?
+            //Dessa är basically samma hela tiden, kan läsas in från fil.
+            //Men hur gör vi med expansions?
 
-        //Vanilla cards
-		maxCards.put(CardType.Attack, 4);
-		maxCards.put(CardType.Favor, 4);
-		maxCards.put(CardType.Nope, 5);
-		maxCards.put(CardType.Shuffle, 4);
-		maxCards.put(CardType.Skip, 4);
-		maxCards.put(CardType.SeeTheFuture, 5);
-        //Vanillas
-		maxCards.put(CardType.HairyPotatoCat, 4);
-		maxCards.put(CardType.Cattermelon, 4);
-		maxCards.put(CardType.RainbowRalphingCat, 4);
-		maxCards.put(CardType.TacoCat, 4);
-		maxCards.put(CardType.OverweightBikiniCat, 4);
-	}
+            //Vanilla cards
+            maxCards.put(CardType.Attack, 4);
+            maxCards.put(CardType.Favor, 4);
+            maxCards.put(CardType.Nope, 5);
+            maxCards.put(CardType.Shuffle, 4);
+            maxCards.put(CardType.Skip, 4);
+            maxCards.put(CardType.SeeTheFuture, 5);
+            //Vanillas
+            maxCards.put(CardType.HairyPotatoCat, 4);
+            maxCards.put(CardType.Cattermelon, 4);
+            maxCards.put(CardType.RainbowRalphingCat, 4);
+            maxCards.put(CardType.TacoCat, 4);
+            maxCards.put(CardType.OverweightBikiniCat, 4);
+	    }   
+        haveBeenSet = true;
+    }
 
     //Builds the deck.
     public void initDeck()
@@ -81,4 +87,10 @@ public class Deck
     {
         return cards.remove(0);
     }
+
+    public static void shuffle()
+    {
+        Collections.shuffle(cards);
+    }
+
 }
