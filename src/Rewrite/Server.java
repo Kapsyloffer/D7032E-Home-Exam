@@ -5,7 +5,11 @@ import java.net.*;
 public class Server 
 {
     public ServerSocket aSocket;
-    public void server(int numberPlayers, int numberOfBots) throws Exception 
+    public Server(int p, int b) throws Exception
+    {
+        serverRun(p, b);
+    }
+    private void serverRun(int numberPlayers, int numberOfBots) throws Exception 
     {
     	//add this instance as a player
         Game.AddPlayer(new Player(0, false, null, null, null)); 

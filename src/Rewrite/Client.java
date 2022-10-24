@@ -6,7 +6,7 @@ import java.util.concurrent.*;
 public class Client 
 {
     	//Networking bullshit
-        public Client(String ip)
+        public Client(String ip) throws Exception
         {
             ClientRun(ip);
         }

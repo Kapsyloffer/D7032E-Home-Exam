@@ -41,12 +41,13 @@ public class CardAction
     {
         Game.announce("A WILD BOMBCAT APPEARS!!! SURPRISE ATTACK!!!");
         boolean hasDef = false;
-        for(Cards c : Game.getCurrentPlayer().getHand())
+        for(Card c : Game.getCurrentPlayer().getHand())
         {
             if(c.getType() == CardType.Defuse)
             {   
                 Game.announce("Defused.");
-                Game.getCurrentPlayer().RemoveFromHand(c);
+                //bruh
+                Game.getCurrentPlayer().RemoveFromHand(c.getType());
                 Discard.Add(c);
                 //defuse action
                 c.Action();
@@ -54,11 +55,11 @@ public class CardAction
         }
         if(!hasDef)
         {
-            KABOOM();
+            Game.getCurrentPlayer().KABOOM();
         }
     }
 
-    private Defuse()
+    private void Defuse()
     {
 
         
@@ -85,7 +86,7 @@ public class CardAction
     //OK
     private void Shuffle()
     {
-        Deck.Shuffle();
+        Deck.shuffle();
         Game.announce("The deck has been shuffled!");
     }
 

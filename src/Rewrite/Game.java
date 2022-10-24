@@ -41,7 +41,7 @@ public class Game
 	private void play(Player playedBy, Card c)
 	{
 		//Add to discard handled in here
-		playedBy.RemoveFromHand(c);
+		playedBy.RemoveFromHand(c.getType());
 		c.Action();
 	}
    
@@ -67,13 +67,13 @@ public class Game
 				whisper("\n" + c.getType());
 			}
             //game
-			if(!Discard.Nopes() >= 5)
+			if(Discard.Nopes() <= 5)
 			{
-
+			  //nopable
 			}
 			else
 			{
-				//nopable
+			  //not nopable
 			}
         }
         while(players.size()>1);
@@ -95,7 +95,7 @@ public class Game
 	//Säger bara åt currentPlayer
 	public static void whisper(String s)
     {
-		curentPlayer.sendMessage(s);
+	    currentPlayer.sendMessage(s);
 	}
 
 	public static void Pass()
