@@ -3,7 +3,6 @@ import java.util.*;
 import Rewrite.Card.*;
 public class CardAction 
 {
-
     public CardAction(CardType c)
     {
         switch(c)
@@ -47,15 +46,17 @@ public class CardAction
 
     }
 
+    //OK
     private void Shuffle()
     {
         Deck.Shuffle();
         Game.Announce("The deck has been shuffled!");
     }
 
+
     private void Skip()
     {
-
+        
     }
 
     //TODO: Test this

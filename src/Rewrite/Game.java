@@ -7,6 +7,7 @@ public class Game
 	public static ArrayList<Player> players = new ArrayList<Player>();
 	public static int numberOfTurnsToTake = 1; //attacked?
     private static Player currentPlayer;
+	private static int playersLeft;
     public static void AddPlayer(Player p)
     {
         players.add(p);
@@ -39,12 +40,19 @@ public class Game
 			System.out.println(e.getMessage());
 		}
     } 
+
+	private void play(Player playedBy, Card c)
+	{
+		//Add to discard handled in here
+		playedBy.RemoveFromHand(c);
+		c.Action();
+	}
    
 	//gmaeloopen
-	public static void RunGame(int firstPlayer)
+	private static void RunGame(int firstPlayer)
     {
-        Player currentPlayer = players.get(firstPlayer);
-		int playersLeft = players.size();
+        currentPlayer = players.get(firstPlayer);
+		playersLeft = players.size();
 
 		//TODO: REWRITE THIS ENTIRE THING
 		//So what does it do?
@@ -60,7 +68,7 @@ public class Game
         }
         while(players.size()>1);
         //Declare winner.
-		Player winner = currentPlayer;
+		//Player winner = currentPlayer;
         Game.Announce("SVERIGE, VI HAR EN VINNARE.");
         System.exit(0);
     }
@@ -78,5 +86,10 @@ public class Game
 	public static void Whisper(String s)
     {
 		curentPlayer.sendMessage(s);
+	}
+
+	public static void Pass()
+	{
+		
 	}
 }
