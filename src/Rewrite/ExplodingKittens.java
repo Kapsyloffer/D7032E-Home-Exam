@@ -9,7 +9,7 @@ public class ExplodingKittens
 	{
 		if(params.length == 2) 
 		{
-			Game.initGame(Integer.valueOf(params[0]).intValue(), Integer.valueOf(params[1]).intValue());
+			//Game.initGame(Integer.valueOf(params[0]).intValue(), Integer.valueOf(params[1]).intValue());
 		} 
 		else if(params.length == 1) 
 		{
@@ -17,7 +17,7 @@ public class ExplodingKittens
 		} 
 		else 
 		{
-			//this.initGame(3, 1);
+			Game.initGame(3, 1);
 			//TODO: Prompt, vill du vara server eller client?
 			//Client: Ange IP. -> Bam
 			//Server: Hur många spelare?

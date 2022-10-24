@@ -74,7 +74,10 @@ public class CardAction
     private void Favor()
     {
         //Target a player
+        //foreach player left -> pick one
+        //The picked one gets a prompt
         //Yo gimme a card
+        //They select a card and give
         //Thx
     }
 
@@ -93,7 +96,8 @@ public class CardAction
 
     private void Skip()
     {
-        
+        //Pass and skip draw is true uwu
+        Game.Pass(true);
     }
 
     //TODO: Test this
@@ -102,18 +106,23 @@ public class CardAction
         ArrayList<Card> d = Deck.getDeck();
         for(int i = 0; i<3; i++)
         {
-            Game.whisper(i+1 + ". " + d.get(i).getType());
+            Game.whisper(i+1 + ". " + d.get(i).getType(), Game.getCurrentPlayer());
         }
     }
 
     //Default cats
     public void Two()
     {
-
+        //Target, och yo ge mig en random
     }
 
     public void Three()
     {
+        //Target, och yo gimme a random
+    }
 
+    public void Ladder()
+    {
+        //If 5 normals cats, pick a card from discard.
     }
 }
