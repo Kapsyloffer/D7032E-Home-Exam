@@ -34,6 +34,7 @@ public class Player
     public void KABOOM()
     {
         exploded = true;
+        Game.announce("KABOOM!!");
         //Stoppar hela handen i discard
         for(Card c : hand)
         {
@@ -47,7 +48,16 @@ public class Player
     }
     public void draw()
     {
-        hand.add(Deck.getDeck().remove(0));
+        Card drawn = Deck.getDeck().remove(0);
+        if(drawn.getType() != CardType.ExplodingKitten)
+        {
+            hand.add(drawn);
+        }
+        else
+        {
+            //Bomben går igång instantly.
+            drawn.Action();
+        }
     }
     public void add(Card c)
     {
@@ -75,6 +85,11 @@ public class Player
                 break;
             }
         }
+    }
+
+    public ArrayList<Card> getHand()
+    {
+        return hand;
     }
     public void sendMessage(Object message) 
     {

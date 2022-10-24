@@ -3,7 +3,6 @@ import java.util.*;
 import java.io.*; 
 import java.net.*;
 import java.util.concurrent.*;
-import Rewrite.Card.*;
 
 public class ExplodingKittens 
 {
@@ -22,7 +21,7 @@ public class ExplodingKittens
 		} 
 		else 
 		{
-			this.initGame(3, 1);
+			//this.initGame(3, 1);
 			//TODO: Prompt, vill du vara server eller client?
 			//Client: Ange IP. -> Bam
 			//Server: Hur många spelare?

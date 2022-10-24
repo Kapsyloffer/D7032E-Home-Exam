@@ -7,6 +7,12 @@ public class CardAction
     {
         switch(c)
         {
+            case ExplodingKitten:
+                Bomb();
+                break;
+            case Defuse:
+                Defuse();
+                break;
             case Attack:
                 Attack();
                 break;
@@ -31,14 +37,44 @@ public class CardAction
         }
     }
 
-    private void Attack()
+    private void Bomb()
+    {
+        Game.announce("A WILD BOMBCAT APPEARS!!! SURPRISE ATTACK!!!");
+        boolean hasDef = false;
+        for(Cards c : Game.getCurrentPlayer().getHand())
+        {
+            if(c.getType() == CardType.Defuse)
+            {   
+                Game.announce("Defused.");
+                Game.getCurrentPlayer().RemoveFromHand(c);
+                Discard.Add(c);
+                //defuse action
+                c.Action();
+            }
+        }
+        if(!hasDef)
+        {
+            KABOOM();
+        }
+    }
+
+    private Defuse()
     {
 
+        
+    }
+
+    private void Attack()
+    {
+        //Pass skip -> next player får 2 turns
+        //Om attack på attack -> Next player får 4 turns osv
     }
 
     private void Favor()
     {
-
+        //Target a player
+        //Yo gimme a card
+        //Thx
     }
 
     private void Nope()
@@ -50,7 +86,7 @@ public class CardAction
     private void Shuffle()
     {
         Deck.Shuffle();
-        Game.Announce("The deck has been shuffled!");
+        Game.announce("The deck has been shuffled!");
     }
 
 

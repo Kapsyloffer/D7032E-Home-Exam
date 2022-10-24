@@ -6,7 +6,11 @@ import java.util.concurrent.*;
 public class Client 
 {
     	//Networking bullshit
-        public void Client(String ipAddress) throws Exception 
+        public Client(String ip)
+        {
+            ClientRun(ip);
+        }
+        public void ClientRun(String ipAddress) throws Exception 
         {
             //Connect to server
             Socket aSocket = new Socket(ipAddress, 2048);
