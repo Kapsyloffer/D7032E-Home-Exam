@@ -4,8 +4,8 @@
 
 - [x] 1. There can be between 2 and 5 players
 - [x] 2. Each player should be given 1 Defuse card
-- [ ] 3. The deck should consist of the following cards before the first hands are dealt:
-   - [ ] a. 2 Defuse cards for 2-4 players, 1 Defuse card for 5 players.
+- [x] 3. The deck should consist of the following cards before the first hands are dealt:
+   - [x] a. 2 Defuse cards for 2-4 players, 1 Defuse card for 5 players.
   - [x] b. 4 Attack cards
   - [x] c. 4 Favor cards
   - [x] d. 5 Nope cards
@@ -20,18 +20,18 @@
 - [x] 4. Shuffle the deck before the first hands are dealt.
 - [x] 5. Deal 7 cards from the deck to each player.
 - [x] 6. Insert enough ExplodingKitten cards into the deck so there is 1 fewer than the number of players
-- [ ] 7. Shuffle the deck before the game starts
+- [x] 7. Shuffle the deck before the game starts
 - [x] 8. Random player goes first
 - [x] 9. On a player’s turn the player can either Pass or Play one or several cards
   - [x] a. Pass will end the turn and the player will draw a card (hoping it is not an ExplodingKitten)
   - [x] b. A player can play as many or as few cards as desired upon one’s turn
 - [x] 10. If an ExplodingKitten card is drawn the Player has to play a Defuse card if one is on hand or explode.
-  - [ ] a. A defused ExplodingKitten card is inserted back into the deck at the desired location by the surviving Player
+  - [x] a. A defused ExplodingKitten card is inserted back into the deck at the desired location by the surviving Player
   - [x] b. An exploded Player discards the cards on hand, including the ExplodingKitten card, and may not take
 additional turns.
-- [ ] 11. Playing a card
+- [x] 11. Playing a card
   - [x] a. Playing an Attack card will end the turn without drawing a card
-    - [ ]i. The next Player takes 2 turns in a row unless that Player plays another Attack card, in which case the
+    - [x]i. The next Player takes 2 turns in a row unless that Player plays another Attack card, in which case the
 consecutive player has to take an additional 2 turns (e.g. 4 turns, then 6, etc.)
   - [ ] b. Playing a Favor card forces another player to give you 1 card of their choice to you.
   - [x] c. Playing a Shuffle card will shuffle the deck.
