@@ -1,5 +1,5 @@
 import NetworkingBullshit.Client;
-import Rewrite.Game;
+import Game.Game;
 
 public class ExplodingKittens 
 {
