@@ -30,8 +30,8 @@
   - [x] b. An exploded Player discards the cards on hand, including the ExplodingKitten card, and may not take
 additional turns.
 - [x] 11. Playing a card
-  - [x] a. Playing an Attack card will end the turn without drawing a card
-    - [x]i. The next Player takes 2 turns in a row unless that Player plays another Attack card, in which case the
+  -[x] a. Playing an Attack card will end the turn without drawing a card
+    -[x] i. The next Player takes 2 turns in a row unless that Player plays another Attack card, in which case the
 consecutive player has to take an additional 2 turns (e.g. 4 turns, then 6, etc.)
   - [ ] b. Playing a Favor card forces another player to give you 1 card of their choice to you.
   - [x] c. Playing a Shuffle card will shuffle the deck.
