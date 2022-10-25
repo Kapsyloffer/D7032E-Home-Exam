@@ -33,14 +33,14 @@ additional turns.
   -[x] a. Playing an Attack card will end the turn without drawing a card
     -[x] i. The next Player takes 2 turns in a row unless that Player plays another Attack card, in which case the
 consecutive player has to take an additional 2 turns (e.g. 4 turns, then 6, etc.)
-  - [ ] b. Playing a Favor card forces another player to give you 1 card of their choice to you.
+  - [x] b. Playing a Favor card forces another player to give you 1 card of their choice to you.
   - [x] c. Playing a Shuffle card will shuffle the deck.
   - [x] d. Playing a Skip card will end your turn without drawing a card (only 1 tun in case of taking multiple turns)
   - [x] e. Playing a SeeTheFuture card will allow the Player to view the top 3 cards in the deck.
-  - [ ] f. Playing two cards of any kind will allow the Player to steal random card from another player
-  - [ ] g. Playing three cards of any kind will allow the Player to name a card to receive from another player (if available)
+  - [x] f. Playing two cards of any kind will allow the Player to steal random card from another player
+  - [x] g. Playing three cards of any kind will allow the Player to name a card to receive from another player (if available)
 - [ ] 12. A Nope card can be played within 5 seconds of any card(s) defined in rule 11 and 12 to stop their action.
-  - [ ] a. A Nope card played on top of another Nope alternates its meaning (between Nope and Yup)
+  - [x] a. A Nope card played on top of another Nope alternates its meaning (between Nope and Yup)
 - [x] 13. When all but one players have exploded the remaining player is announced as the winner to all players.
 # Future modifications to the game
 - [ ] 14. Support expansions like Imploding Kittens, Streaking Kittens, and Barking Kittens (but don’t include physical gimmicks

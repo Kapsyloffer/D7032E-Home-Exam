@@ -2,6 +2,7 @@ package Rewrite;
 import java.util.*;
 
 import NetworkingBullshit.Server;
+import Rewrite.Card.CardType;
 
 public class Game 
 {
@@ -64,55 +65,78 @@ public class Game
 		//If no players, declare winner.
 		do
         {
-			whisper("It is now your turn.\nThis is your hand:", currentPlayer);
-			for(Card c : currentPlayer.getHand())
-			{
-				whisper("\n" + c.getType(), currentPlayer);
-			}
-			//get input
-			//for each card om input matchar enumname
-			//If they do, c.play()
-			//if none do: "not a valid move, sorry"
-			String response = currentPlayer.readMessage(false).toLowerCase();
-			//TODO: Fix this stupid retarded monkey code
-			switch(response)
-			{
-				case "pass":
-					Pass(false);
-				break;
-				default:
-					if(currentPlayer.has(response))
-					{
-						for(Card c : currentPlayer.getHand())
-						{
-							if(c.getType().toString().toLowerCase() == response)
-							{
-								play(currentPlayer, c);
-								break;
-							}
-						}
-					}
-					break;
-
-				//if player says nope, check if he has nope, 
-				//if he does, do nope, else MWAH MWAH
-
-			}
-
-            //game
-			if(Discard.Nopes() <= 5)
-			{
-			  //nopable
-			
-			}
-			else
-			{
-			  //not nopable
-			}
+		    try 
+		    {
+                Card fetchedCard = new Card(CardType.ExplodingKitten);
+    			whisper("It is now your turn.\nThis is your hand:", currentPlayer);
+    			for(Card c : currentPlayer.getHand())
+    			{
+    				whisper("\n" + c.getType(), currentPlayer);
+    			}
+    			//get input
+    			//for each card om input matchar enumname
+    			//If they do, check for nopes, if no nopes; c.play()
+    			//if none do: "not a valid move, sorry"
+    			String response = currentPlayer.readMessage(false).toLowerCase();
+    			
+    			//TODO: Fix this stupid retarded monkey code
+    			switch(response)
+    			{
+    				case "pass":
+    					Pass(false);
+    				break;
+    				default:
+    					if(currentPlayer.has(response))
+    					{
+    						for(Card c : currentPlayer.getHand())
+    						{
+    							if(c.getType().toString().toLowerCase() == response)
+    							{
+    								fetchedCard = c;
+    								break;
+    							}
+    						}
+    					}
+    					break;
+    				//if player says nope, check if he has nope, 
+    				//if he does, do nope, else MWAH MWAH
+    			}
+    			if(fetchedCard.getType() != CardType.ExplodingKitten)
+    			{
+    			    announce(currentPlayer.getID() + " wishes to play: " + fetchedCard.getType());
+                    //game
+                    if(Discard.Nopes() <= 5)
+                    {
+                          //nopable
+                          //if a player has a nope, do they wish to play it?
+                          for(Player p : players)
+                          {
+                              for(Card c : p.getHand())
+                              {
+                                  if(c.getType() == CardType.Nope)
+                                  {
+                                      whisper("Play nope? Press <enter> to play uwu", p);
+                                      break;
+                                  }
+                              }
+                         }
+                    }
+                    else
+                    {
+                      //not nopable
+                      announce("No nopes left");
+                      play(currentPlayer, fetchedCard);
+                    }
+    			}
+		    }
+		    catch(Exception e)
+		    {
+		        System.out.println(e.getMessage());
+		    }
         }
         while(players.size()>1);
+		
         //Declare winner.
-		//Player winner = currentPlayer;
         Game.announce("SVERIGE, VI HAR EN VINNARE.");
         System.exit(0);
     }
