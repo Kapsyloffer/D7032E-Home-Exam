@@ -132,7 +132,7 @@ public class CardAction
     {
         //count
         int nopes = 0;
-        for(Card c : Discard.dPile)
+        for(Card c : Discard.getDiscard())
         {
             if(c.getType() != CardType.Nope)
             {

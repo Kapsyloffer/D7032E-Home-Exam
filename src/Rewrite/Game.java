@@ -1,5 +1,8 @@
 package Rewrite;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import NetworkingBullshit.Server;
 import Rewrite.Card.CardType;
@@ -10,6 +13,7 @@ public class Game
 	private static int turnsToTake = 1; //attacked?
     private static Player currentPlayer;
 	private static int playersLeft;
+	private static int NOPETIME = 5;
 
     public static void AddPlayer(Player p)
     {
@@ -107,19 +111,51 @@ public class Game
                     //game
                     if(Discard.Nopes() <= 5)
                     {
+                        ExecutorService threadpool = Executors.newFixedThreadPool(players.size());
                           //nopable
                           //if a player has a nope, do they wish to play it?
                           for(Player p : players)
                           {
-                              for(Card c : p.getHand())
+                              if(p.getHand().contains(Card.CardType.Nope))
                               {
-                                  if(c.getType() == CardType.Nope)
+                                  whisper("Play nope? Press <enter> to play uwu", p);
+                                  Runnable task = new Runnable() 
                                   {
-                                      whisper("Play nope? Press <enter> to play uwu", p);
-                                      break;
-                                  }
+                                      @Override
+                                      public void run() 
+                                      {
+                                          try 
+                                          {
+                                              String nextMessage = p.readMessage(true); //Read that is interrupted after secondsToInterruptWithNope
+                                              
+                                              boolean hasNope = false;
+                                              for(Card c : p.getHand())
+                                              {
+                                                  if(c.getType() == CardType.Nope)
+                                                  {
+                                                      hasNope = true;
+                                                  }
+                                              }
+                                              
+                                              if(!nextMessage.equals(" ") && hasNope) 
+                                              {
+                                                  //Dum ful lösning but it works
+                                                  p.RemoveFromHand(CardType.Nope);
+                                                  play(p, new Card(CardType.Nope));
+                                                  announce("Player " + p.getID() + " played Nope");
+                                              }
+                                          } 
+                                          catch(Exception e) 
+                                          {
+                                              System.out.println("addToDiscardPile: " +e.getMessage());
+                                          }
+                                      }
+                                  };
+                                  threadpool.execute(task);
                               }
-                         }
+                         } 
+                         //add an additional delay to avoid concurrancy problems with the ObjectInputStream
+                         threadpool.awaitTermination((NOPETIME*1000)+500, TimeUnit.MILLISECONDS);
                     }
                     else
                     {

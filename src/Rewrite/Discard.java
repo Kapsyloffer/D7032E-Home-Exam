@@ -5,7 +5,7 @@ import Rewrite.Card.CardType;
 
 public class Discard 
 {
-    static ArrayList<Card> dPile = new ArrayList<Card>();
+    private static ArrayList<Card> dPile = new ArrayList<Card>();
 
     //Returns number of nopes.
     public static int Nopes()
@@ -24,5 +24,10 @@ public class Discard
     public static void Add(Card c)
     {
         dPile.add(c);
+    }
+    
+    public static ArrayList<Card> getDiscard()
+    {
+        return dPile;
     }
 }

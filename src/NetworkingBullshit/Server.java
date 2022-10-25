@@ -7,7 +7,7 @@ import Rewrite.Player;
 
 public class Server 
 {
-    public ServerSocket aSocket;
+    private ServerSocket aSocket;
     public Server(int p, int b) throws Exception
     {
         serverRun(p, b);
