@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import CardPiles.Deck;
 import CardPiles.Discard;
 import Cardstuff.Card;
+import Cardstuff.CardAction;
 import Cardstuff.Card.CardType;
 import NetworkingBullshit.Server;
 import Player.Player;
@@ -85,20 +86,55 @@ public class Game
     			//for each card om input matchar enumname
     			//If they do, check for nopes, if no nopes; c.play()
     			//if none do: "not a valid move, sorry"
-    			String response = currentPlayer.readMessage(false).toLowerCase();
+    			String[] response = currentPlayer.readMessage(false).split(" ");
     			
     			//TODO: Fix this stupid retarded monkey code
-    			switch(response)
+    			switch(response[0].toLowerCase())
     			{
     				case "pass":
     					Pass(false);
     				break;
+					case "two":
+						for(Card c : currentPlayer.getHand())
+						{
+							int count = 0;
+							if(c.getType().toString().toLowerCase() == response[1].toLowerCase())
+							{
+								count++;
+							}
+							//so dum but it works I hope
+							if(count >= 2)
+							{
+								currentPlayer.RemoveFromHand(c.getType());
+								currentPlayer.RemoveFromHand(c.getType());
+								new CardAction(null).Two();
+							}
+						}
+					break;
+					case "three":
+					for(Card c : currentPlayer.getHand())
+						{
+							int count = 0;
+							if(c.getType().toString().toLowerCase() == response[1].toLowerCase())
+							{
+								count++;
+							}
+							//so dum but it works I hope
+							if(count >= 3)
+							{
+								currentPlayer.RemoveFromHand(c.getType());
+								currentPlayer.RemoveFromHand(c.getType());
+								currentPlayer.RemoveFromHand(c.getType());
+								new CardAction(null).Three();
+							}
+						}
+					break;
     				default:
-    					if(currentPlayer.has(response))
+    					if(currentPlayer.has(response[0]))
     					{
     						for(Card c : currentPlayer.getHand())
     						{
-    							if(c.getType().toString().toLowerCase() == response)
+    							if(c.getType().toString().toLowerCase() == response[0])
     							{
     								fetchedCard = c;
     								break;
@@ -120,7 +156,7 @@ public class Game
                           //if a player has a nope, do they wish to play it?
                           for(Player p : players)
                           {
-                              if(p.getHand().contains(Card.CardType.Nope))
+                              if(p.has("Nope"))
                               {
                                   whisper("Play nope? Press <enter> to play uwu", p);
                                   Runnable task = new Runnable() 
