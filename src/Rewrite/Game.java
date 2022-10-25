@@ -5,11 +5,10 @@ import NetworkingBullshit.Server;
 
 public class Game 
 {
-	public static ArrayList<Player> players = new ArrayList<Player>();
-	public static int turnsToTake = 1; //attacked?
+	private static ArrayList<Player> players = new ArrayList<Player>();
+	private static int turnsToTake = 1; //attacked?
     private static Player currentPlayer;
 	private static int playersLeft;
-	public int secondsToInterruptWithNope = 5;
 
     public static void AddPlayer(Player p)
     {
@@ -42,7 +41,7 @@ public class Game
     } 
 
 	//If not noped, do the action.
-	private void play(Player playedBy, Card c)
+	private static void play(Player playedBy, Card c)
 	{
 		//Add to discard handled in here
 		playedBy.RemoveFromHand(c.getType());
@@ -74,12 +73,37 @@ public class Game
 			//for each card om input matchar enumname
 			//If they do, c.play()
 			//if none do: "not a valid move, sorry"
+			String response = currentPlayer.readMessage(false).toLowerCase();
+			//TODO: Fix this stupid retarded monkey code
+			switch(response)
+			{
+				case "pass":
+					Pass(false);
+				break;
+				default:
+					if(currentPlayer.has(response))
+					{
+						for(Card c : currentPlayer.getHand())
+						{
+							if(c.getType().toString().toLowerCase() == response)
+							{
+								play(currentPlayer, c);
+								break;
+							}
+						}
+					}
+					break;
+
+				//if player says nope, check if he has nope, 
+				//if he does, do nope, else MWAH MWAH
+
+			}
 
             //game
 			if(Discard.Nopes() <= 5)
 			{
 			  //nopable
-			 
+			
 			}
 			else
 			{
@@ -108,7 +132,6 @@ public class Game
 	    p.sendMessage(s);
 	}
 
-	//TODO: Implement this
 	public static void Pass(boolean skipped)
 	{
 		//If attacked, turnes left 3. make it 2
@@ -120,17 +143,20 @@ public class Game
 		//Switch player when turns run out.
 		if(turnsToTake == 0)
 		{
-			SwitchPlayer(turnsToTake);
+			SwitchPlayer(turnsToTake, false);
 		}
 	}
 
-	public static void SwitchPlayer(int turns)
+	public static void SwitchPlayer(int turns, boolean attacked)
 	{
-		boolean attacked = (turns > 1) ? true : false;
 		//The problem is that modifyability gets crippled, Attack 3x exists in some expansion.
 		if(attacked)
 		{
-			turns +=2;
+			turnsToTake += turns;
+		}
+		else
+		{
+			turnsToTake = 1;
 		}
 		//TODO: Potentiell felkälla. Checka om player är sist. woRKS IN THEORY
 		if(players.indexOf(currentPlayer) < players.size()-1)
@@ -140,12 +166,22 @@ public class Game
 		}
 		else
 		{
-			currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
+			currentPlayer = players.get(0);
 		}
+	}
+
+	public static ArrayList<Player> getPlayers()
+	{
+		return players;
 	}
 
 	public static Player getCurrentPlayer()
 	{
 		return currentPlayer;
+	}
+
+	public static void removePlayer(Player p)
+	{
+		players.remove(p);
 	}
 }

@@ -24,8 +24,14 @@ public class Deck
         {
             //TODO: Gör denna med JSON
             //Dessa dependar på spelare.
-            maxCards.put(CardType.ExplodingKitten, p-1);
-            maxCards.put(CardType.Defuse, 6-p);
+            if(p >=2 && p <=4)
+            {
+                maxCards.put(CardType.Defuse, 2);
+            }
+            else if (p == 5)
+            {
+                maxCards.put(CardType.Defuse, 1);
+            }
 
             //Dessa är basically samma hela tiden, kan läsas in från fil.
             //Men hur gör vi med expansions?
@@ -62,20 +68,24 @@ public class Deck
                 cards.add(c);
             }
         }
-        //Why shuffle twice?
-        Collections.shuffle(cards);
+        shuffle();
 
-        //TODO: Access playerlist in game.
-       /* for(Player player : players) 
+       for(Player player : Game.getPlayers()) 
         {
-            Card c = new Card(Card.CardType.Defuse);
+            //Give defuse in hand
+            Card c = new Card(CardType.Defuse);
             player.add(c);
             //Draw
             for(int i=0; i<7; i++) 
             {
                 player.draw();
             }
-        }*/ 
+        }
+        for(int i = 0; i < Game.getPlayers().size()-1; i++)
+        {
+            cards.add(new Card (CardType.ExplodingKitten));
+        }
+        shuffle();
     }
 
     public static ArrayList<Card> getDeck()
@@ -91,6 +101,11 @@ public class Deck
     public static void shuffle()
     {
         Collections.shuffle(cards);
+    }
+
+    public static void Insert(Card c, int p)
+    {
+        cards.add(p, c);
     }
 
 }

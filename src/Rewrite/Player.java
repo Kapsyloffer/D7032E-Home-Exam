@@ -6,15 +6,17 @@ import java.net.*;
 import Rewrite.Card.CardType;
 public class Player
 {
-    public int playerID;
+    private int playerID;
 
-    public boolean online;
-    public boolean isBot;
-    public boolean exploded = false;
+    private boolean online;
+    private boolean isBot;
+    private boolean exploded = false;
 
-    public Socket connection;
-    public ObjectInputStream inFromClient;
-    public ObjectOutputStream outToClient;
+    private Socket connection;
+    private ObjectInputStream inFromClient;
+    private ObjectOutputStream outToClient;
+
+    int NOPETIME = 5;
 
     public ArrayList<Card> hand = new ArrayList<Card>();
 
@@ -30,16 +32,22 @@ public class Player
         this.online = (connection != null) ? true : false;
     }
 
+    public int getID()
+    {
+        return playerID;
+    }
+
     //Kills em
     public void KABOOM()
     {
-        exploded = true;
+        this.exploded = true;
         Game.announce("KABOOM!!");
         //Stoppar hela handen i discard
         for(Card c : hand)
         {
             Discard.Add(c);
         }
+        Game.removePlayer(this);
     }
 
     public void SortHand()
@@ -85,6 +93,18 @@ public class Player
                 break;
             }
         }
+    }
+
+    public boolean has(String s)
+    {
+        for(Card c : hand)
+        {
+            if(c.getType().toString().toLowerCase() == s)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Card> getHand()
@@ -133,7 +153,7 @@ public class Player
                     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     int millisecondsWaited = 0;
                     //TODO: Fixa den här.
-                    while(!br.ready() && millisecondsWaited<(5*1000)) 
+                    while(!br.ready() && millisecondsWaited<(NOPETIME*1000)) 
                     {
                         Thread.sleep(200);
                         millisecondsWaited += 200;

@@ -51,6 +51,7 @@ public class CardAction
                 Discard.Add(c);
                 //defuse action
                 c.Action();
+                break;
             }
         }
         if(!hasDef)
@@ -67,11 +68,14 @@ public class CardAction
         while(!done)
         {
             try
-            {
-                if(Integer.parseInt(Game.getCurrentPlayer().readMessage(false)) <= Deck.getDeck().size()-1)
+            {   
+                int placement = Integer.parseInt(Game.getCurrentPlayer().readMessage(false));
+                if(placement <= Deck.getDeck().size()-1)
                 {
-
+                    Deck.Insert(new Card(CardType.ExplodingKitten), placement);
                 }
+                done = true;
+                Game.SwitchPlayer(0, false);
             }
             catch (Exception e)
             {
@@ -83,12 +87,14 @@ public class CardAction
     private void Attack()
     {
         //Pass skip -> next player får 2 turns
-        //Om attack på attack -> Next player får 4 turns osv
+        //Attack ger any remaining turns + 2
+        Game.SwitchPlayer(2, true);
     }
 
     private void Favor()
     {
         //Target a player
+        Target();
         //foreach player left -> pick one
         //The picked one gets a prompt
         //Yo gimme a card
@@ -115,12 +121,15 @@ public class CardAction
         Game.Pass(true);
     }
 
-    //TODO: Test this
+    //Test this later
     private void SeeTheFuture()
     {
         ArrayList<Card> d = Deck.getDeck();
         for(int i = 0; i<3; i++)
         {
+            //1. Cardname
+            //2. Cardname
+            //3. Cardname
             Game.whisper(i+1 + ". " + d.get(i).getType(), Game.getCurrentPlayer());
         }
     }
@@ -133,11 +142,16 @@ public class CardAction
 
     public void Three()
     {
-        //Target, och yo gimme a random
+        //Target, och yo gimme a CARDNAME
+
     }
 
-    public void Ladder()
+    private void Target()
     {
-        //If 5 normals cats, pick a card from discard.
+        Game.whisper("\nPossible targets;", Game.getCurrentPlayer());
+        for(Player p : Game.getPlayers())
+        {
+            Game.whisper("\nPlayerID:" + p.getID() + " ", Game.getCurrentPlayer());
+        }
     }
 }
