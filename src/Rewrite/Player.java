@@ -91,6 +91,7 @@ public class Player
     {
         return hand;
     }
+    
     public void sendMessage(Object message) 
     {
         if(online) 

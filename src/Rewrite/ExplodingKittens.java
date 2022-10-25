@@ -1,15 +1,15 @@
 package Rewrite;
+import NetworkingBullshit.Client;
 
 public class ExplodingKittens 
 {
-	public int secondsToInterruptWithNope = 5;
 
 	//OK
 	public ExplodingKittens(String[] params) throws Exception 
 	{
 		if(params.length == 2) 
 		{
-			//Game.initGame(Integer.valueOf(params[0]).intValue(), Integer.valueOf(params[1]).intValue());
+			Game.initGame(Integer.valueOf(params[0]).intValue(), Integer.valueOf(params[1]).intValue());
 		} 
 		else if(params.length == 1) 
 		{
@@ -17,13 +17,13 @@ public class ExplodingKittens
 		} 
 		else 
 		{
-			Game.initGame(3, 1);
+			//Game.initGame(3, 1);
 			//TODO: Prompt, vill du vara server eller client?
 			//Client: Ange IP. -> Bam
 			//Server: Hur många spelare?
 			//Server: check if good. -> print port.
-			//System.out.println("Server syntax: java ExplodingKittens numPlayers numBots");
-			//System.out.println("Client syntax: IP");
+			System.out.println("Server syntax: java ExplodingKittens numPlayers numBots");
+			System.out.println("Client syntax: IP");
 		}
 	}
 

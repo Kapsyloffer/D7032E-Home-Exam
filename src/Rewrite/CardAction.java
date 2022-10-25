@@ -3,7 +3,7 @@ import java.util.*;
 import Rewrite.Card.*;
 public class CardAction 
 {
-    public CardAction(CardType c)
+    public CardAction(CardType c) 
     {
         switch(c)
         {
@@ -61,8 +61,23 @@ public class CardAction
 
     private void Defuse()
     {
+        Game.announce("The bomb has been defused!");
+        Game.whisper("Where do you wish to place the bomb? 0, 1, 2, ...", Game.getCurrentPlayer());
+        boolean done = false;
+        while(!done)
+        {
+            try
+            {
+                if(Integer.parseInt(Game.getCurrentPlayer().readMessage(false)) <= Deck.getDeck().size()-1)
+                {
 
-        
+                }
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private void Attack()

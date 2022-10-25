@@ -26,7 +26,7 @@ public class Card
         this.cType = t;
     }
 
-    public void Action()
+    public void Action() 
     {
 		new CardAction(this.cType);
     }
