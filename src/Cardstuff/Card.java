@@ -1,4 +1,5 @@
-package Rewrite;
+package Cardstuff;
+
 public class Card
 {
     public enum CardType 

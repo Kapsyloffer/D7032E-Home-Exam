@@ -1,9 +1,14 @@
-package Rewrite;
-import java.util.*; 
+package Player;
+import java.util.*;
+
+import CardPiles.Deck;
+import CardPiles.Discard;
+import Cardstuff.Card;
+import Cardstuff.Card.CardType;
+import Game.Game;
+
 import java.io.*; 
 import java.net.*;
-
-import Rewrite.Card.CardType;
 public class Player
 {
     private int playerID;

@@ -1,7 +1,8 @@
-package Rewrite;
+package CardPiles;
 import java.util.*;
 
-import Rewrite.Card.CardType;
+import Cardstuff.Card;
+import Cardstuff.Card.CardType;
 
 public class Discard 
 {

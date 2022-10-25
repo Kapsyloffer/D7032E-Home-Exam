@@ -1,6 +1,10 @@
-package Rewrite;
-import java.util.*; 
-import Rewrite.Card.*;
+package CardPiles;
+import java.util.*;
+
+import Cardstuff.Card;
+import Cardstuff.Card.*;
+import Game.Game;
+import Player.Player;
 
 public class Deck 
 {

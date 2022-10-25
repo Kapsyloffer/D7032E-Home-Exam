@@ -2,8 +2,8 @@ package NetworkingBullshit;
 import java.io.*; 
 import java.net.*;
 
-import Rewrite.Game;
-import Rewrite.Player;
+import Game.Game;
+import Player.Player;
 
 public class Server 
 {

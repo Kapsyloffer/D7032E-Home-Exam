@@ -1,11 +1,15 @@
-package Rewrite;
+package Game;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import CardPiles.Deck;
+import CardPiles.Discard;
+import Cardstuff.Card;
+import Cardstuff.Card.CardType;
 import NetworkingBullshit.Server;
-import Rewrite.Card.CardType;
+import Player.Player;
 
 public class Game 
 {

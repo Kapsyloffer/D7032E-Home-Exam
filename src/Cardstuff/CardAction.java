@@ -1,6 +1,11 @@
-package Rewrite;
-import java.util.*; 
-import Rewrite.Card.*;
+package Cardstuff;
+import java.util.*;
+
+import CardPiles.Deck;
+import CardPiles.Discard;
+import Cardstuff.Card.*;
+import Game.Game;
+import Player.Player;
 public class CardAction 
 {
     private boolean Nopes = false;
