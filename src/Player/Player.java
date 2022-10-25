@@ -4,7 +4,6 @@ import java.util.*;
 import CardPiles.Deck;
 import CardPiles.Discard;
 import Cardstuff.Card;
-import Cardstuff.Card.CardType;
 import Game.Game;
 
 import java.io.*; 
@@ -62,7 +61,7 @@ public class Player
     public void draw()
     {
         Card drawn = Deck.getDeck().remove(0);
-        if(drawn.getType() != CardType.ExplodingKitten)
+        if(drawn.getType() != "ExplodingKitten")
         {
             hand.add(drawn);
         }
@@ -80,14 +79,14 @@ public class Player
     {
         for(Card c : hand)
         {
-            if (c.getType() == CardType.Nope)
+            if (c.getType() == "Nope")
             {
                 return true;
             }
         }
         return false;
     }
-    public void RemoveFromHand(Card.CardType t)
+    public void RemoveFromHand(String t)
     {
         for(Card c : hand)
         {

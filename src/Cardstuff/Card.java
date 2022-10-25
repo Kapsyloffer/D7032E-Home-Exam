@@ -2,27 +2,9 @@ package Cardstuff;
 
 public class Card
 {
-    public enum CardType 
-	{
-		//Dessa är speciella. Hantera instantly.
-		ExplodingKitten,
-		Defuse,
-		//Not these tho
-		Attack,
-		Favor,
-		Nope,
-		Shuffle,
-		Skip,
-		SeeTheFuture,
-		HairyPotatoCat,
-		Cattermelon,
-		RainbowRalphingCat,
-		TacoCat,
-		OverweightBikiniCat
-	}
-    private CardType cType;
+    private String cType;
 
-    public Card(CardType t)
+    public Card(String t)
     {
         this.cType = t;
     }
@@ -32,7 +14,7 @@ public class Card
 		new CardAction(this.cType);
     }
 
-    public CardType getType()
+    public String getType()
     {
         return cType;
     }

@@ -3,39 +3,38 @@ import java.util.*;
 
 import CardPiles.Deck;
 import CardPiles.Discard;
-import Cardstuff.Card.*;
 import Game.Game;
 import Player.Player;
 public class CardAction 
 {
     private boolean Nopes = false;
-    public CardAction(CardType c) 
+    public CardAction(String c) 
     {
         Game.announce(Game.getCurrentPlayer().getID() + " played: " + c.toString());
         switch(c)
         {
-            case ExplodingKitten:
+            case "ExplodingKitten":
                 Bomb();
                 break;
-            case Defuse:
+            case "Defuse":
                 Defuse();
                 break;
-            case Attack:
+            case "Attack":
                 Attack();
                 break;
-            case Favor:
+            case "Favor":
                 Favor();
                 break;
-            case Nope:
+            case "Nope":
                 Nope();
                 break;
-            case Shuffle:
+            case "Shuffle":
                 Shuffle();
                 break;
-            case Skip:
+            case "Skip":
                 Skip();
                 break;
-            case SeeTheFuture:
+            case "SeeTheFuture":
                 SeeTheFuture();
                 break;
             default:
@@ -50,7 +49,7 @@ public class CardAction
         boolean hasDef = false;
         for(Card c : Game.getCurrentPlayer().getHand())
         {
-            if(c.getType() == CardType.Defuse)
+            if(c.getType() == "Defuse")
             {   
                 Game.announce("Defused.");
                 //bruh
@@ -79,7 +78,7 @@ public class CardAction
                 int placement = Integer.parseInt(Game.getCurrentPlayer().readMessage(false));
                 if(placement <= Deck.getDeck().size()-1)
                 {
-                    Deck.Insert(new Card(CardType.ExplodingKitten), placement);
+                    Deck.Insert(new Card("ExplodingKitten"), placement);
                 }
                 done = true;
                 Game.SwitchPlayer(0, false);
@@ -139,7 +138,7 @@ public class CardAction
         int nopes = 0;
         for(Card c : Discard.getDiscard())
         {
-            if(c.getType() != CardType.Nope)
+            if(c.getType() != "Nope")
             {
                 break;
             }

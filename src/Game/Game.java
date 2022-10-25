@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import CardPiles.Deck;
 import CardPiles.Discard;
 import Cardstuff.Card;
-import Cardstuff.Card.CardType;
 import NetworkingBullshit.Server;
 import Player.Player;
 
@@ -75,7 +74,7 @@ public class Game
         {
 		    try 
 		    {
-                Card fetchedCard = new Card(CardType.ExplodingKitten);
+                Card fetchedCard = new Card("");
     			whisper("It is now your turn.\nThis is your hand:", currentPlayer);
     			for(Card c : currentPlayer.getHand())
     			{
@@ -109,7 +108,7 @@ public class Game
     				//if player says nope, check if he has nope, 
     				//if he does, do nope, else MWAH MWAH
     			}
-    			if(fetchedCard.getType() != CardType.ExplodingKitten)
+    			if(fetchedCard.getType() != "ExplodingKitten")
     			{
     			    announce(currentPlayer.getID() + " wishes to play: " + fetchedCard.getType());
                     //game
@@ -120,8 +119,6 @@ public class Game
                           //if a player has a nope, do they wish to play it?
                           for(Player p : players)
                           {
-                              if(p.getHand().contains(Card.CardType.Nope))
-                              {
                                   whisper("Play nope? Press <enter> to play uwu", p);
                                   Runnable task = new Runnable() 
                                   {
@@ -135,7 +132,7 @@ public class Game
                                               boolean hasNope = false;
                                               for(Card c : p.getHand())
                                               {
-                                                  if(c.getType() == CardType.Nope)
+                                                  if(c.getType() == "Nope")
                                                   {
                                                       hasNope = true;
                                                   }
@@ -144,8 +141,8 @@ public class Game
                                               if(!nextMessage.equals(" ") && hasNope) 
                                               {
                                                   //Dum ful lösning but it works
-                                                  p.RemoveFromHand(CardType.Nope);
-                                                  play(p, new Card(CardType.Nope));
+                                                  p.RemoveFromHand("Nope");
+                                                  play(p, new Card("Nope"));
                                                   announce("Player " + p.getID() + " played Nope");
                                               }
                                           } 
@@ -156,7 +153,6 @@ public class Game
                                       }
                                   };
                                   threadpool.execute(task);
-                              }
                          } 
                          //add an additional delay to avoid concurrancy problems with the ObjectInputStream
                          threadpool.awaitTermination((NOPETIME*1000)+500, TimeUnit.MILLISECONDS);

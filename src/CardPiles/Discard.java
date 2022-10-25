@@ -2,7 +2,6 @@ package CardPiles;
 import java.util.*;
 
 import Cardstuff.Card;
-import Cardstuff.Card.CardType;
 
 public class Discard 
 {
@@ -14,7 +13,7 @@ public class Discard
         int Nopes = 0;
         for(Card c : dPile)
         {
-            if(c.getType() == CardType.Nope)
+            if(c.getType() == "Nope")
             {
                 Nopes++;
             }
@@ -24,7 +23,7 @@ public class Discard
 
     public static void Add(Card c)
     {
-        dPile.add(c);
+        dPile.add(0, c);
     }
     
     public static ArrayList<Card> getDiscard()
