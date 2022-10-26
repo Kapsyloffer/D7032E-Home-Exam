@@ -20,6 +20,10 @@ public class Game
 	private static int playersLeft;
 	private static int NOPETIME = 5;
 
+	public static int getNopeTime()
+	{
+		return NOPETIME;
+	}
     public static void AddPlayer(Player p)
     {
         players.add(p);
@@ -283,5 +287,16 @@ public class Game
 	public static void removePlayer(Player p)
 	{
 		players.remove(p);
+	}
+
+	public static void refreshPlayers()
+	{
+		for(Player p : players)
+		{
+			if(p.isExploded())
+			{
+				removePlayer(p);
+			}
+		}
 	}
 }

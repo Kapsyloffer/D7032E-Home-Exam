@@ -36,6 +36,10 @@ public class Deck
             {
                 maxCards.put(CardType.Defuse, 1);
             }
+            else
+            {
+                throw new Error();
+            }
 
             //Dessa är basically samma hela tiden, kan läsas in från fil.
             //Men hur gör vi med expansions?
