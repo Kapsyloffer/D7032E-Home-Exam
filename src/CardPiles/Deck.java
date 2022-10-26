@@ -11,21 +11,16 @@ public class Deck
     private static HashMap<CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
     private static ArrayList<Card> cards = new ArrayList<Card>();
 	private int players;
-    private boolean haveBeenSet = false;
 
     public Deck(int p)
     {
-        this.players = p;
         //Initiate deck
-        setCards(this.players);
     }
 
 	//Problemet är att det hårdkodas fast på olika ställen.
-	private void setCards(int p)
+	private static void setCards(int p)
 	{
         //Bara för att preventa double adding
-        if(!haveBeenSet)
-        {
             //TODO: Gör denna med JSON
             //Dessa dependar på spelare.
             if(p >=2 && p <=4)
@@ -42,6 +37,8 @@ public class Deck
             }
 
             //Dessa är basically samma hela tiden, kan läsas in från fil.
+
+            //TODO: Omvandla till JSON
             //Men hur gör vi med expansions?
 
             //Vanilla cards
@@ -57,23 +54,22 @@ public class Deck
             maxCards.put(CardType.RainbowRalphingCat, 4);
             maxCards.put(CardType.TacoCat, 4);
             maxCards.put(CardType.OverweightBikiniCat, 4);
-	    }   
-        haveBeenSet = true;
     }
 
     //Builds the deck.
-    public void initDeck()
+    public static void initDeck()
     {
         //Clear out the deck
         cards = new ArrayList<Card>();
+        setCards(Game.getPlayers().size());
         for(Map.Entry<Card.CardType, Integer> mC : maxCards.entrySet())
         {
-            System.out.println(mC.getKey() + " " + mC.getValue());
+            Game.announce(mC.getKey() + " " + mC.getValue());
             //T.ex om key Shuffle har 4 som value stoppar vi in 4 shufflekort.
             for(int i = 0; i < mC.getValue(); i++)
             {
                 Card c = new Card(mC.getKey());
-                cards.add(c);
+                cards.add(0, c);
             }
         }
         shuffle();
@@ -103,7 +99,10 @@ public class Deck
 
     public static Card draw()
     {
-        return cards.remove(0);
+        Card cToDraw = cards.get(0);
+        Game.announce(cards.get(0).toString());
+        cards.remove(0);
+        return cToDraw;
     }
 
     public static void shuffle()

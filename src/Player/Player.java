@@ -21,8 +21,6 @@ public class Player
     private ObjectInputStream inFromClient;
     private ObjectOutputStream outToClient;
 
-    int NOPETIME = 5;
-
     public ArrayList<Card> hand = new ArrayList<Card>();
 
     Scanner in = new Scanner(System.in);
@@ -104,7 +102,9 @@ public class Player
     {
         for(Card c : hand)
         {
-            if(c.getType().toString().toLowerCase() == s)
+            Game.announce("\n" + c.getType().toString().toLowerCase());
+            Game.announce("\n" + s);
+            if(s.equals(c.getType().toString().toLowerCase()))
             {
                 return true;
             }
@@ -158,7 +158,7 @@ public class Player
                     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     int millisecondsWaited = 0;
                     //TODO: Fixa den här.
-                    while(!br.ready() && millisecondsWaited<(NOPETIME*1000)) 
+                    while(!br.ready() && millisecondsWaited<(Game.getNopeTime()*1000)) 
                     {
                         Thread.sleep(200);
                         millisecondsWaited += 200;
