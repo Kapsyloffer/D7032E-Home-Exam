@@ -21,7 +21,7 @@ public class Player
     private ObjectInputStream inFromClient;
     private ObjectOutputStream outToClient;
 
-    public ArrayList<Card> hand = new ArrayList<Card>();
+    private ArrayList<Card> hand = new ArrayList<Card>();
 
     Scanner in = new Scanner(System.in);
 
@@ -59,15 +59,18 @@ public class Player
     }
     public void draw()
     {
-        Card drawn = Deck.getDeck().remove(0);
+        Card drawn = Deck.getDeck().get(0);
+        Deck.draw();
         if(drawn.getType() != CardType.ExplodingKitten)
         {
-            hand.add(drawn);
+            Deck.draw();
         }
         else
         {
             //Bomben går igång instantly.
             drawn.Action();
+            //Tar bort bomben så vi inte drar den.
+            Deck.removeFromTop();
         }
     }
     public void add(Card c)

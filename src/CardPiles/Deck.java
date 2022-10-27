@@ -12,11 +12,6 @@ public class Deck
     private static ArrayList<Card> cards = new ArrayList<Card>();
 	private int players;
 
-    public Deck(int p)
-    {
-        //Initiate deck
-    }
-
 	//Problemet är att det hårdkodas fast på olika ställen.
 	private static void setCards(int p)
 	{
@@ -61,6 +56,7 @@ public class Deck
     {
         //Clear out the deck
         cards = new ArrayList<Card>();
+        //Build the deck for the appropriate size.
         setCards(Game.getPlayers().size());
         for(Map.Entry<Card.CardType, Integer> mC : maxCards.entrySet())
         {
@@ -113,6 +109,12 @@ public class Deck
     public static void Insert(Card c, int p)
     {
         cards.add(p, c);
+    }
+
+    //In case of bomb
+    public static void removeFromTop()
+    {
+        cards.remove(cards.get(0));
     }
 
 }

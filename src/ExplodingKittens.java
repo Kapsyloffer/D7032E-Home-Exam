@@ -17,15 +17,16 @@ public class ExplodingKittens
 		} 
 		else 
 		{
-			//Game.initGame(3, 1);
+			//Testing
+			Game.initGame(2, 0);
 			//Game.announce("PEEPEE");
 			//TODO: Prompt, vill du vara server eller client?
 			//Client: Ange IP. -> Bam
 			//Server: Hur många spelare?
 			//Server: check if good. -> print port.
 			//Game.announce("PEEPEE");
-			System.out.println("Server syntax: java ExplodingKittens numPlayers numBots");
-			System.out.println("Client syntax: IP");
+			//System.out.println("Server syntax: java ExplodingKittens numPlayers numBots");
+			//System.out.println("Client syntax: IP");
 		}
 	}
 

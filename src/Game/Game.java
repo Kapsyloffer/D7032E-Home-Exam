@@ -24,6 +24,7 @@ public class Game
 	{
 		return NOPETIME;
 	}
+
     public static void AddPlayer(Player p)
     {
         players.add(p);
@@ -42,7 +43,7 @@ public class Game
 			//Initiate a server
 	        new Server(numPlayers, numBots);
 			//Initiates a deck
-			new Deck(playersLeft).initDeck();
+			Deck.initDeck();
 			//Randomize a first player
 	        Random rnd = new Random();
 			System.out.println("We're running boyz");
@@ -81,32 +82,28 @@ public class Game
 		    try 
 		    {
                 Card fetchedCard = new Card(null);
-
-    			whisper("\n\nIt is now your turn.\nThis is your hand:", currentPlayer);
-    			announce("player " + currentPlayer.getID() +" has " + turnsToTake + " turn(s) left!");
+    			whisper("It is now your turn.\nThis is your hand:", currentPlayer);
     			for(Card c : currentPlayer.getHand())
     			{
-    				whisper(""+c.getType(), currentPlayer);
+    				whisper("\n" + c.getType(), currentPlayer);
     			}
     			//get input
     			//for each card om input matchar enumname
     			//If they do, check for nopes, if no nopes; c.play()
     			//if none do: "not a valid move, sorry"
-    			String response = currentPlayer.readMessage(false);
-				response = response.replaceAll("\\d","").toLowerCase();
+    			String[] response = currentPlayer.readMessage(false).toLowerCase().trim().split(" ");
     			
     			//TODO: Fix this stupid retarded monkey code
-    			switch(response)
+    			switch(response[0].toLowerCase())
     			{
     				case "pass":
-						announce("passed");
     					Pass(false);
     				break;
-					/*case "two":
+					case "two":
 						for(Card c : currentPlayer.getHand())
 						{
 							int count = 0;
-							if(c.getType().toString().toLowerCase() == response.toLowerCase())
+							if(c.getType().toString().toLowerCase() == response[1].toLowerCase())
 							{
 								count++;
 							}
@@ -136,25 +133,19 @@ public class Game
 								new CardAction(null).Three();
 							}
 						}
-					break;*/
+					break;
     				default:
-					announce("looking for: " + response + " ...");
-    					if(currentPlayer.has(response))
+    					if(currentPlayer.has(response[0]))
     					{
     						for(Card c : currentPlayer.getHand())
     						{
-								announce(c.getType().toString());
-    							if(c.getType().toString().toLowerCase().equals(response))
+    							if(c.getType().toString().toLowerCase().trim().equals(response[0].trim()))
     							{
     								fetchedCard = c;
-									break;
+    								break;
     							}
     						}
     					}
-						else
-						{
-							announce("\n\nCannot find card: " + response);
-						}
     					break;
     				//if player says nope, check if he has nope, 
     				//if he does, do nope, else MWAH MWAH
@@ -218,11 +209,6 @@ public class Game
                       play(currentPlayer, fetchedCard);
                     }
     			}
-				else
-				{
-					announce("\n\nNo nope condition?");
-					play(currentPlayer, fetchedCard);
-				}
 		    }
 		    catch(Exception e)
 		    {
@@ -255,16 +241,13 @@ public class Game
 	{
 		//If attacked, turnes left 3. make it 2
 		turnsToTake--;
-		announce("\n\nWANTS TO PASS");
 		if(!skipped)
 		{
-			announce("\n\ndrew");
 			currentPlayer.draw();
 		}
 		//Switch player when turns run out.
 		if(turnsToTake == 0)
 		{
-			announce("\n\nSwitchplayer");
 			SwitchPlayer(turnsToTake, false);
 		}
 	}
@@ -281,15 +264,10 @@ public class Game
 			turnsToTake = 1;
 		}
 		//TODO: Potentiell felkälla. Checka om player är sist. woRKS IN THEORY
-		
-		announce("indexof: " + players.indexOf(currentPlayer));
-		announce("size: " + players.size());
-		
-		if(players.indexOf(currentPlayer) <= players.size()-1)
+		if(players.indexOf(currentPlayer) < players.size()-1)
 		{
 			//Ugly but works in theory
-			int n = players.indexOf(currentPlayer)+1;
-			currentPlayer = players.get(n);
+			currentPlayer = players.get(players.indexOf(currentPlayer) + 1);
 		}
 		else
 		{
