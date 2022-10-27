@@ -10,7 +10,6 @@ public class Deck
 {
     private static HashMap<CardType, Integer> maxCards = new HashMap<Card.CardType, Integer>();
     private static ArrayList<Card> cards = new ArrayList<Card>();
-	private int players;
 
 	//Problemet är att det hårdkodas fast på olika ställen.
 	private static void setCards(int p)

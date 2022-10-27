@@ -20,20 +20,20 @@ public class Card
 		TacoCat,
 		OverweightBikiniCat
 	}
-    private CardType cType;
+    private CardType thisType;
 
     public Card(CardType t)
     {
-        this.cType = t;
+        this.thisType = t;
     }
 
     public void Action() 
     {
-		new CardAction(this.cType);
+		new CardAction(this.thisType);
     }
 
     public CardType getType()
     {
-        return cType;
+        return thisType;
     }
 }

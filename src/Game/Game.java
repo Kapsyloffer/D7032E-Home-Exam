@@ -17,7 +17,6 @@ public class Game
 	private static ArrayList<Player> players = new ArrayList<Player>();
 	private static int turnsToTake = 1; //attacked?
     private static Player currentPlayer;
-	private static int playersLeft;
 	private static int NOPETIME = 5;
 
 	public static int getNopeTime()
@@ -32,8 +31,7 @@ public class Game
 	//Setup
     public static void initGame(int numPlayers, int numBots)
     {
-		playersLeft = numPlayers + numBots;
-        if(playersLeft > 5 || playersLeft < 2)
+        if(numPlayers + numBots > 5 || numPlayers + numBots < 2)
 		{
 			System.out.println("Incorrect number of players.");
 			System.exit(0);
@@ -67,8 +65,6 @@ public class Game
 	private static void RunGame(int firstPlayer)
     {
         currentPlayer = players.get(firstPlayer);
-		playersLeft = players.size();
-
 		//TODO: REWRITE THIS ENTIRE THING
 		//So what does it do?
 		//While players left > 1, keep playing. OK

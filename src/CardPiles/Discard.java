@@ -24,7 +24,7 @@ public class Discard
 
     public static void Add(Card c)
     {
-        dPile.add(c);
+        dPile.add(0, c);
     }
     
     public static ArrayList<Card> getDiscard()
